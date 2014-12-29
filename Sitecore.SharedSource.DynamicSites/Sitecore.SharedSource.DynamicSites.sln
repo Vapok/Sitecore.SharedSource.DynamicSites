@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sitecore.SharedSource.DynamicSites", "Sitecore.SharedSource.DynamicSites.csproj", "{F920400E-5086-40AC-B9D1-3184179D7E9A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{924033F2-7382-4BB2-8B65-E85AAF40A10C}"
+	ProjectSection(SolutionItems) = preProject
+		..\Solution Items\DynamicSites.config = ..\Solution Items\DynamicSites.config
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F920400E-5086-40AC-B9D1-3184179D7E9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F920400E-5086-40AC-B9D1-3184179D7E9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F920400E-5086-40AC-B9D1-3184179D7E9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F920400E-5086-40AC-B9D1-3184179D7E9A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
