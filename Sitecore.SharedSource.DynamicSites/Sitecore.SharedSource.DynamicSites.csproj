@@ -36,6 +36,7 @@
       <HintPath>..\References\Sitecore 7.5\Sitecore.Kernel.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -45,8 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Caching\CacheProvider.cs" />
     <Compile Include="Caching\SiteCache.cs" />
+    <Compile Include="Caching\SiteCacheItem.cs" />
     <Compile Include="Events\ItemHandler.cs" />
     <Compile Include="Fields\BaseCustomField.cs" />
     <Compile Include="Fields\LinkTypes\CustomLookupField.cs" />
@@ -55,6 +56,8 @@
     <Compile Include="Items\ModuleSettings\DynamicSiteSettingsItem.base.cs" />
     <Compile Include="Pipelines\HttpRequest\DynamicSiteResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sites\DynamicSitesProvider.cs" />
+    <Compile Include="Sites\SwitcherSiteProvider.cs" />
     <Compile Include="Utilities\DynamicSiteManager.cs" />
     <Compile Include="Utilities\DynamicSiteSettings.cs" />
   </ItemGroup>

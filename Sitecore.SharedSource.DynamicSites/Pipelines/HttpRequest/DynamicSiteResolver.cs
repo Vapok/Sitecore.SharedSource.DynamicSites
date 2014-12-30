@@ -1,6 +1,5 @@
 ﻿
 using System.Collections.Generic;
-using System.Linq;
 using Sitecore.Collections;
 using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
@@ -39,8 +38,10 @@ namespace Sitecore.SharedSource.DynamicSites.Pipelines.HttpRequest
                     return;
             
             //Resolve Dynamic Site
-            var site = ResolveDynamicSiteContext();
+            var site = ResolveSiteContext(args);
+            //var site = ResolveDynamicSiteContext();
             UpdatePaths(args, site);
+            //UpdatePaths(args, site);
             Context.Site = site;
         }
 
@@ -60,13 +61,9 @@ namespace Sitecore.SharedSource.DynamicSites.Pipelines.HttpRequest
             ISet<Item> dynamicSiteItems;
             Item dynamicItem = null;
 
-            var sites = DynamicSiteSettings.Sites;
+            var sites = SiteManager.Providers["dynamic"].GetSites();
             if (sites == null) return Context.Site;
 
-            if (sites.TryGetValue(host, out dynamicSiteItems))
-            {
-                dynamicItem = dynamicSiteItems.FirstOrDefault(item => item != null);
-            }
 
             return CreateSiteContext(dynamicItem ?? DynamicSiteSettings.GetSettingsItem.DefaultStartItem);
         }

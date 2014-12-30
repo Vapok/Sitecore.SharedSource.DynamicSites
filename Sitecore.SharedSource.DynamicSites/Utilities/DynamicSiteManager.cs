@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sitecore.Collections;
 using Sitecore.Data.Items;
+using Sitecore.Diagnostics;
 using Sitecore.SecurityModel;
+using Sitecore.SharedSource.DynamicSites.Items.BaseTemplates;
 using Sitecore.Sites;
 using Sitecore.StringExtensions;
 
@@ -123,5 +126,47 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
                 return false;
             }
         }
+
+        private static Site CreateSite([NotNull] DynamicSiteDefinitionBaseItem item, [NotNull] Site defaultSite)
+        {
+            var properties = new StringDictionary(defaultSite.Properties);
+            properties["name"] = item.Name;
+            properties["hostName"] = item.Hostname.Text;
+            properties["startItem"] = string.Format("/{0}", item.HomeItem.Item.Name);
+            properties["rootPath"] = item.HomeItem.Item.Parent.Paths.FullPath;
+            var newSite = new Site(item.Name,properties);
+            return newSite;
+
+        }
+
+        public static SafeDictionary<string, Site> GetDynamicSitesDictionary(Site defaultSite)
+        {
+            Assert.ArgumentNotNull(defaultSite, "defaultSite");
+            var sites = new SafeDictionary<string, Site>();
+
+            var siteRoot = DynamicSiteSettings.SitesFolder;
+            if (siteRoot == null) return sites;
+
+            foreach (Item dynamicSite in siteRoot.Children)
+            {
+                if (!HasBaseTemplate(dynamicSite)) continue;
+
+                var dynamicSiteItem = (DynamicSiteDefinitionBaseItem)dynamicSite;
+
+                if (dynamicSiteItem == null || dynamicSiteItem.HomeItem == null ||
+                    dynamicSiteItem.Hostname.Text.IsNullOrEmpty())
+                {
+                    continue;
+                }
+                var newSite = CreateSite(dynamicSite, defaultSite);
+                if (sites.ContainsKey(newSite.Name)) continue;
+                
+                sites.Add(newSite.Name,newSite);
+
+            }
+
+            return sites;
+        }
+
     }
 }

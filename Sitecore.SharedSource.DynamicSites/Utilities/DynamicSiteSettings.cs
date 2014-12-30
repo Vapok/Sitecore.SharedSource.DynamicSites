@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Sitecore.Collections;
 using Sitecore.Configuration;
 using Sitecore.Data;
 using Sitecore.Data.Items;
@@ -25,7 +26,7 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
             Enabled = true
         };
 
-        private static string MaxCacheSize
+        public static string MaxCacheSize
         {
             get { return Settings.GetSetting(MaxCacheSetting, "50MB"); }
         }
@@ -51,14 +52,6 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
             }
         }
 
-        public static IDictionary<string, ISet<Item>> Sites
-        {
-            get
-            {
-                return GetFromCache(CacheKey, GetDynamicSites);
-            }
-        }
-
         public static bool IsInitialized
         {
             get { return DynamicSiteManager.SettingsInitialized(); }
@@ -77,11 +70,12 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
             }
         }
 
-        private static Dictionary<string, ISet<Item>> GetDynamicSites
+
+        private static SafeDictionary<string, ISet<Item>> GetDynamicSites
         {
             get
             {
-                var sites = new Dictionary<string, ISet<Item>>();
+                var sites = new SafeDictionary<string, ISet<Item>>();
 
                 var siteRoot = SitesFolder;
                 if (siteRoot == null) return sites;
@@ -114,18 +108,6 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
                 return sites;
 
             }
-        }
-
-        private static Dictionary<string, ISet<Item>> GetFromCache(string key,
-            Dictionary<string, ISet<Item>> initalCache)
-        {
-            if (_siteCache.InnerCache.ContainsKey(key))
-                return (Dictionary<string, ISet<Item>>)_siteCache.InnerCache.GetValue(key);
-
-            var cacheItem = new SiteCacheItem(initalCache);
-            _siteCache.InnerCache.Add(key, cacheItem);
-
-            return (Dictionary<string, ISet<Item>>)_siteCache.InnerCache.GetValue(key);
         }
 
         public static TemplateItem BaseSiteDefinitionTemplateItem
