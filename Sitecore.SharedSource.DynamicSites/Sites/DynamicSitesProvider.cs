@@ -28,9 +28,7 @@ namespace Sitecore.SharedSource.DynamicSites.Sites
         public override SiteCollection GetSites()
         {
             InitializeSites();
-            SiteCollection siteCollection = new SiteCollection();
-            siteCollection.AddRange(_sites);
-            return siteCollection;
+            return _sites;
         }
 
         public override void Initialize(string name, NameValueCollection config)
@@ -43,9 +41,7 @@ namespace Sitecore.SharedSource.DynamicSites.Sites
 
         private void InitializeSites()
         {
-            if (_dynamicSiteDictionary != null) return;
-
-            if (_dynamicSiteDictionary != null) return;
+            if (DynamicSiteSettings.GetSiteCache.Count() > 0 && _sites != null && _dynamicSiteDictionary.Count > 0) return;
 
             Assert.IsNotNullOrEmpty(_dynamicConfigPath, "No siteConfig specified in DynamicSiteProvider configuration.");
             var collection = new SiteCollection();

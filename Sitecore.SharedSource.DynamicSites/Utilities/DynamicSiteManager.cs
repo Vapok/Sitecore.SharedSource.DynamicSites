@@ -168,5 +168,11 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
             return sites;
         }
 
+        public static void ClearCache()
+        {
+            if (DynamicSiteSettings.GetSiteCache.Count() > 0)
+                DynamicSiteSettings.GetSiteCache.Clear();
+        }
+
     }
 }

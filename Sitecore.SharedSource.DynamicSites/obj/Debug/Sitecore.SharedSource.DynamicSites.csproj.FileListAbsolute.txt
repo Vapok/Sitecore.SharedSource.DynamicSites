@@ -9,3 +9,9 @@ D:\Code\Modules\Dynamic Sites\Sitecore.SharedSource.DynamicSites\bin\Sitecore.Ke
 D:\Code\Modules\Dynamic Sites\Sitecore.SharedSource.DynamicSites\obj\Debug\Sitecore.SharedSource.DynamicSites.csprojResolveAssemblyReference.cache
 D:\Code\Modules\Dynamic Sites\Sitecore.SharedSource.DynamicSites\obj\Debug\Sitecore.SharedSource.DynamicSites.dll
 D:\Code\Modules\Dynamic Sites\Sitecore.SharedSource.DynamicSites\obj\Debug\Sitecore.SharedSource.DynamicSites.pdb
+C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\bin\Sitecore.Kernel.dll
+C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\bin\SharedSource.Sitecore.DynamicSites.dll
+C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\bin\SharedSource.Sitecore.DynamicSites.pdb
+C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\obj\Debug\SharedSource.Sitecore.DynamicSites.dll
+C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\obj\Debug\SharedSource.Sitecore.DynamicSites.pdb
+C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\obj\Debug\Sitecore.SharedSource.DynamicSites.csprojResolveAssemblyReference.cache

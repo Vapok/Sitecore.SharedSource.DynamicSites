@@ -1,5 +1,6 @@
 ﻿using System;
 using Sitecore.Data;
+using Sitecore.Data.Events;
 using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
 using Sitecore.Events;
@@ -18,6 +19,27 @@ namespace Sitecore.SharedSource.DynamicSites.Events
         /// <param name="sender">The sender.
         ///             </param><param name="args">The arguments.
         ///             </param>
+
+        [UsedImplicitly]
+        internal void OnItemDeleted(object sender, EventArgs args)
+        {
+            var arguments = args as ItemDeletedEventArgs;
+
+            if (arguments == null) return;
+
+            if (arguments.Item == null) return;
+
+            //Is Module Disabled at the config level?
+            if (DynamicSiteSettings.Disabled) return;
+
+            //If Item being deleted is a Dynamic Site, clear the Dynamic Site cache.
+            if (arguments.Item != null && DynamicSiteManager.HasBaseTemplate(arguments.Item))
+            {
+                DynamicSiteManager.ClearCache();
+            }
+            
+        }
+
         [UsedImplicitly]
         internal void OnItemSaved(object sender, EventArgs args)
         {
@@ -32,7 +54,7 @@ namespace Sitecore.SharedSource.DynamicSites.Events
             //If Item being saved is a Dynamic Site, clear the Dynamic Site cache.
             if (obj != null && DynamicSiteManager.HasBaseTemplate(obj))
             {
-                DynamicSiteSettings.ClearCache();
+                DynamicSiteManager.ClearCache();
             }
 
             //If Item being saved is the Dynamic Site Settings Item, Make Updates
