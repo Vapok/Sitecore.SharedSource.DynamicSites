@@ -56,7 +56,6 @@
     <Compile Include="Fields\SimpleTypes\CustomTextField.cs" />
     <Compile Include="Items\BaseTemplates\DynamicSiteDefinitionBaseItem.base.cs" />
     <Compile Include="Items\ModuleSettings\DynamicSiteSettingsItem.base.cs" />
-    <Compile Include="Pipelines\HttpRequest\DynamicSiteResolver.cs" />
     <Compile Include="Pipelines\Loader\InitializeDynamicSites.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sites\DynamicSitesProvider.cs" />
