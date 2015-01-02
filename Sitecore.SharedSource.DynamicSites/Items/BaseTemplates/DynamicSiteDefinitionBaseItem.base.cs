@@ -4,7 +4,7 @@ using Sitecore.SharedSource.DynamicSites.Fields.SimpleTypes;
 
 namespace Sitecore.SharedSource.DynamicSites.Items.BaseTemplates
 {
-internal partial class DynamicSiteDefinitionBaseItem : CustomItem
+internal class DynamicSiteDefinitionBaseItem : CustomItem
 {
 
 public static readonly string TemplateId = "{6A5CCD86-C5E0-45DE-BA64-4296481F2DE3}";

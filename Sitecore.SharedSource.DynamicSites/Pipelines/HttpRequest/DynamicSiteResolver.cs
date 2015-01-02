@@ -1,12 +1,7 @@
 ﻿
-using System.Collections.Generic;
-using Sitecore.Collections;
-using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
 using Sitecore.Pipelines.HttpRequest;
 using Sitecore.SharedSource.DynamicSites.Utilities;
-using Sitecore.Sites;
-using Sitecore.Web;
 
 namespace Sitecore.SharedSource.DynamicSites.Pipelines.HttpRequest
 {
@@ -44,47 +39,5 @@ namespace Sitecore.SharedSource.DynamicSites.Pipelines.HttpRequest
             //UpdatePaths(args, site);
             Context.Site = site;
         }
-
-        /// <summary>
-        /// Resolves the Dynamic Site context.
-        /// </summary>
-        /// <returns/>
-        private SiteContext ResolveDynamicSiteContext()
-        {
-            var requestUri = WebUtil.GetRequestUri();
-            var siteContext = GetSiteContext(requestUri.Host);
-            return siteContext;
-        }
-
-        private SiteContext GetSiteContext(string host)
-        {
-            ISet<Item> dynamicSiteItems;
-            Item dynamicItem = null;
-
-            var sites = SiteManager.Providers["dynamic"].GetSites();
-            if (sites == null) return Context.Site;
-
-
-            return CreateSiteContext(dynamicItem ?? DynamicSiteSettings.GetSettingsItem.DefaultStartItem);
-        }
-
-        private SiteContext CreateSiteContext(Item item)
-        {
-            var siteInfoDictionary = new StringDictionary();
-
-            foreach (string key in Context.Site.SiteInfo.Properties.Keys)
-            {
-                siteInfoDictionary.Add(key, Context.Site.SiteInfo.Properties[key]);
-            }
-
-            siteInfoDictionary["startItem"] = string.Format("/{0}", item.Name);
-            siteInfoDictionary["rootPath"] = item.Parent.Paths.FullPath;
-
-            var newInfo = SiteInfo.Create(siteInfoDictionary);
-            var newSite = new SiteContext(newInfo);
-            return newSite;
-   
-        }
-
     }
 }

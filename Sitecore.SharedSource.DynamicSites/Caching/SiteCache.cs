@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
 using Sitecore.Caching;
 using Sitecore.SharedSource.DynamicSites.Utilities;
 using Sitecore.Sites;
@@ -42,14 +42,7 @@ namespace Sitecore.SharedSource.DynamicSites.Caching
         //GetAllSites
         public SiteCollection GetAllSites()
         {
-            var collection = new SiteCollection();
-
-            foreach (string cacheKey in InnerCache.GetCacheKeys())
-            {
-                collection.Add(GetSite(cacheKey));
-            }
-
-            return collection;
+            return GetAllSites(InnerCache.GetCacheKeys());
         }
 
         //ContainsSite
@@ -69,7 +62,7 @@ namespace Sitecore.SharedSource.DynamicSites.Caching
             return InnerCache.Count;
         }
 
-        public SiteCollection GetAllSites([NotNull] List<string> orderedList)
+        public SiteCollection GetAllSites([NotNull] IEnumerable orderedList)
         {
             var collection = new SiteCollection();
 
