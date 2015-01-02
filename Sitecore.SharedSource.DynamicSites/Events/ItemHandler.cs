@@ -19,25 +19,29 @@ namespace Sitecore.SharedSource.DynamicSites.Events
         /// <param name="sender">The sender.
         ///             </param><param name="args">The arguments.
         ///             </param>
+        /// 
+        /// TODO: Add Rename Event
 
         [UsedImplicitly]
         internal void OnItemDeleted(object sender, EventArgs args)
         {
             var arguments = args as ItemDeletedEventArgs;
-
             if (arguments == null) return;
-
             if (arguments.Item == null) return;
 
-            //Is Module Disabled at the config level?
-            if (DynamicSiteSettings.Disabled) return;
+            //Reset Caches
+            ResetDynamicSitesCache(arguments.Item);
+        }
 
-            //If Item being deleted is a Dynamic Site, clear the Dynamic Site cache.
-            if (arguments.Item != null && DynamicSiteManager.HasBaseTemplate(arguments.Item))
-            {
-                DynamicSiteManager.ClearCache();
-            }
-            
+        [UsedImplicitly]
+        internal void OnItemRenamed(object sender, EventArgs args)
+        {
+            var arguments = args as ItemRenamedEventArgs;
+            if (arguments == null) return;
+            if (arguments.Item == null) return;
+
+            //Reset Caches
+            ResetDynamicSitesCache(arguments.Item);
         }
 
         [UsedImplicitly]
@@ -45,21 +49,18 @@ namespace Sitecore.SharedSource.DynamicSites.Events
         {
             Assert.ArgumentNotNull(sender, "sender");
             Assert.ArgumentNotNull(args, "args");
+            var obj = Event.ExtractParameter(args, 0) as Item;
+            if (obj == null) return;
 
             //Is Module Disabled at the config level?
             if (DynamicSiteSettings.Disabled) return;
             
-            var obj = Event.ExtractParameter(args, 0) as Item;
-
-            //If Item being saved is a Dynamic Site, clear the Dynamic Site cache.
-            if (obj != null && DynamicSiteManager.HasBaseTemplate(obj))
-            {
-                DynamicSiteManager.ClearCache();
-            }
-
+            //Reset Cache if Item is Dynamic Site.
+            ResetDynamicSitesCache(obj);
+            
             //If Item being saved is the Dynamic Site Settings Item, Make Updates
             //Return otherwise.
-            if (obj == null || obj.TemplateID != new ID(DynamicSiteSettingsItem.TemplateId)) return;
+            if (obj.TemplateID != new ID(DynamicSiteSettingsItem.TemplateId)) return;
 
             //Get ItemChanges
             var itemChanges = Event.ExtractParameter(args, 1) as ItemChanges;
@@ -102,6 +103,18 @@ namespace Sitecore.SharedSource.DynamicSites.Events
 
             if (oldTemplateItem != null)
                 DynamicSiteManager.RemoveBaseTemplate(oldTemplateItem);
+        }
+
+        private void ResetDynamicSitesCache([NotNull] Item item)
+        {
+            //Is Module Disabled at the config level?
+            if (DynamicSiteSettings.Disabled) return;
+
+            //If Item being deleted is a Dynamic Site, clear the Dynamic Site cache.
+            if (DynamicSiteManager.HasBaseTemplate(item))
+            {
+                DynamicSiteManager.ClearCache();
+            }
         }
     }
 }

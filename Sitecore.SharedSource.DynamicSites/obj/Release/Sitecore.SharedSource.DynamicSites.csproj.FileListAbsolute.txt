@@ -35,3 +35,4 @@ C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\Sitecore.S
 C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\bin\Sitecore.Kernel.dll
 C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\obj\Release\SharedSource.Sitecore.DynamicSites.dll
 C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\obj\Release\SharedSource.Sitecore.DynamicSites.pdb
+C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\obj\Release\Sitecore.SharedSource.DynamicSites.csprojResolveAssemblyReference.cache

@@ -49,6 +49,7 @@
     <Compile Include="Caching\SiteCache.cs" />
     <Compile Include="Caching\SiteCacheItem.cs" />
     <Compile Include="Events\ItemHandler.cs" />
+    <Compile Include="Events\ItemRenamedEventArgs.cs" />
     <Compile Include="Fields\BaseCustomField.cs" />
     <Compile Include="Fields\LinkTypes\CustomLookupField.cs" />
     <Compile Include="Fields\SimpleTypes\CustomTextField.cs" />

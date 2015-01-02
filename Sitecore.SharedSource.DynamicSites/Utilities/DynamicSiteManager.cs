@@ -71,11 +71,19 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
 
         private static void SaveItemBaseTemplates([NotNull] Item item, [NotNull] IEnumerable<string> baseTemplates)
         {
-            using (new SecurityDisabler())
+            try
             {
-                item.Editing.BeginEdit();
-                item[FieldIDs.BaseTemplate] = string.Join("|", baseTemplates);
-                item.Editing.EndEdit();
+                using (new SecurityDisabler())
+                {
+                    item.Editing.BeginEdit();
+                    item[FieldIDs.BaseTemplate] = string.Join("|", baseTemplates);
+                    item.Editing.EndEdit();
+                }
+
+            }
+            catch (Exception e)
+            {
+                Log.Error(String.Format("Error Saving Item Base Template for Dynamic Site: {0}\r\n{1}", e.Message, e.StackTrace), e);
             }
         }
 
@@ -94,48 +102,66 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
         {
             if (SettingsInitialized())
                 return true;
-
-            var settingsItem = DynamicSiteSettings.GetSettingsItem;
-            if (settingsItem == null) return false;
-
-            var websiteItem = SiteManager.GetSite("website") ?? SiteManager.GetSite(DynamicSiteSettings.SiteName);
-
-            var rootPath = websiteItem.Properties["rootPath"];
-            var defaultPath = rootPath + websiteItem.Properties["startItem"];
-            if (defaultPath.IsNullOrEmpty() || rootPath.IsNullOrEmpty()) return false;
-
-            var siteFolderItem = DynamicSiteSettings.GetCurrentDatabase.GetItem(rootPath);
-            var siteItem = DynamicSiteSettings.GetCurrentDatabase.GetItem(defaultPath);
-            if (siteFolderItem == null || siteItem == null) return false;
-
             try
             {
-                using (new SecurityDisabler())
+                var settingsItem = DynamicSiteSettings.GetSettingsItem;
+                if (settingsItem == null) return false;
+
+                var websiteItem = SiteManager.GetSite("website") ?? SiteManager.GetSite(DynamicSiteSettings.SiteName);
+
+                var rootPath = websiteItem.Properties["rootPath"];
+                var defaultPath = rootPath + websiteItem.Properties["startItem"];
+                if (defaultPath.IsNullOrEmpty() || rootPath.IsNullOrEmpty()) return false;
+
+                var siteFolderItem = DynamicSiteSettings.GetCurrentDatabase.GetItem(rootPath);
+                var siteItem = DynamicSiteSettings.GetCurrentDatabase.GetItem(defaultPath);
+                if (siteFolderItem == null || siteItem == null) return false;
+
+                try
                 {
-                    settingsItem.InnerItem.Editing.BeginEdit();
-                    settingsItem.InnerItem[settingsItem.SitesFolder.Field.InnerField.ID] = siteFolderItem.ID.ToString();
-                    settingsItem.InnerItem[settingsItem.SiteDefinitionTemplate.Field.InnerField.ID] = siteItem.TemplateID.ToString();
-                    settingsItem.InnerItem.Editing.EndEdit();
+                    using (new SecurityDisabler())
+                    {
+                        settingsItem.InnerItem.Editing.BeginEdit();
+                        settingsItem.InnerItem[settingsItem.SitesFolder.Field.InnerField.ID] = siteFolderItem.ID.ToString();
+                        settingsItem.InnerItem[settingsItem.SiteDefinitionTemplate.Field.InnerField.ID] = siteItem.TemplateID.ToString();
+                        settingsItem.InnerItem.Editing.EndEdit();
+                    }
+
+                    return true;
+
+                }
+                catch (Exception e)
+                {
+                    Log.Error(String.Format("Error Saving Initial Item State: {0}\r\n{1}", e.Message, e.StackTrace), e);
+                    return false;
                 }
 
-                return true;
-
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Log.Error(String.Format("Error Initializing Dynamic Sites: {0}\r\n{1}", e.Message, e.StackTrace), e);
                 return false;
             }
         }
 
         private static Site CreateSite([NotNull] DynamicSiteDefinitionBaseItem item, [NotNull] Site defaultSite)
         {
-            var properties = new StringDictionary(defaultSite.Properties);
-            properties["name"] = item.Name;
-            properties["hostName"] = item.Hostname.Text;
-            properties["startItem"] = string.Format("/{0}", item.HomeItem.Item.Name);
-            properties["rootPath"] = item.HomeItem.Item.Parent.Paths.FullPath;
-            var newSite = new Site(item.Name,properties);
-            return newSite;
+            try
+            {
+                if (item.HomeItem.Item == null) return null;
+                var properties = new StringDictionary(defaultSite.Properties);
+                properties["name"] = item.Name;
+                properties["hostName"] = item.Hostname.Text;
+                properties["startItem"] = string.Format("/{0}", item.HomeItem.Item.Name);
+                properties["rootPath"] = item.HomeItem.Item.Parent.Paths.FullPath;
+                var newSite = new Site(item.Name, properties);
+                return newSite;
+            }
+            catch (Exception e)
+            {
+                Log.Error(String.Format("Error Creating Dynamic Site Definition: {0}\r\n{1}",e.Message,e.StackTrace),e);
+                return null;
+            }
 
         }
 
@@ -146,23 +172,39 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
 
             var siteRoot = DynamicSiteSettings.SitesFolder;
             if (siteRoot == null) return sites;
-
-            foreach (Item dynamicSite in siteRoot.Children)
+            try
             {
-                if (!HasBaseTemplate(dynamicSite)) continue;
-
-                var dynamicSiteItem = (DynamicSiteDefinitionBaseItem)dynamicSite;
-
-                if (dynamicSiteItem == null || dynamicSiteItem.HomeItem == null ||
-                    dynamicSiteItem.Hostname.Text.IsNullOrEmpty())
+                foreach (Item dynamicSite in siteRoot.Children)
                 {
-                    continue;
-                }
-                var newSite = CreateSite(dynamicSite, defaultSite);
-                if (sites.ContainsKey(newSite.Name)) continue;
-                
-                sites.Add(newSite.Name,newSite);
+                    try
+                    {
+                        if (!HasBaseTemplate(dynamicSite)) continue;
 
+                        var dynamicSiteItem = (DynamicSiteDefinitionBaseItem)dynamicSite;
+
+                        if (dynamicSiteItem == null || dynamicSiteItem.HomeItem == null ||
+                            dynamicSiteItem.Hostname.Text.IsNullOrEmpty())
+                        {
+                            continue;
+                        }
+                        var newSite = CreateSite(dynamicSiteItem, defaultSite);
+
+                        if (newSite == null) continue;
+
+                        if (sites.ContainsKey(newSite.Name)) continue;
+
+                        sites.Add(newSite.Name, newSite);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(String.Format("Error Fetching Dynamic Sites: {0}\r\n{1}", e.Message, e.StackTrace), e);
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error(String.Format("Error in Dynamic Sites: {0}\r\n{1}", e.Message, e.StackTrace), e);
             }
 
             return sites;
