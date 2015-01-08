@@ -7,7 +7,6 @@ using Sitecore.Diagnostics;
 using Sitecore.IO;
 using Sitecore.SharedSource.DynamicSites.Utilities;
 using Sitecore.Sites;
-using Sitecore.Web;
 using Sitecore.Xml;
 
 namespace Sitecore.SharedSource.DynamicSites.Sites
@@ -29,7 +28,9 @@ namespace Sitecore.SharedSource.DynamicSites.Sites
         public override SiteCollection GetSites()
         {
             InitializeSites();
-            return (SiteCollection)_sites.Reverse();
+            var reverseSites = new SiteCollection();
+            reverseSites.AddRange(_sites.Reverse());
+            return reverseSites;
         }
 
         public override void Initialize(string name, NameValueCollection config)
