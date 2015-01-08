@@ -19,6 +19,3 @@ Does Not utilize a HttpBegin Pipeline Processor. Instead, utilizes existing Site
 Utilizes all Sitecore API Site Caches for each Dynamic Site, works with Analytics, Page Editor, Experience Analytics, and Experience Editor!
 
 Open to comments and suggestions.
-
-Future Enhancements:
-- Add more options to Site Definition.

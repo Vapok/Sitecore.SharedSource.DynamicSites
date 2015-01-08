@@ -29,7 +29,7 @@ namespace Sitecore.SharedSource.DynamicSites.Sites
         public override SiteCollection GetSites()
         {
             InitializeSites();
-            return _sites;
+            return (SiteCollection)_sites.Reverse();
         }
 
         public override void Initialize(string name, NameValueCollection config)
