@@ -7,7 +7,7 @@ namespace Sitecore.SharedSource.DynamicSites.Fields.LinkTypes
     /// Borrowed from the Custom Item Generator package written originally by Gabe Boys
     /// Custom Item and Custom Field Code extracted andreduced for purposes of this module.
     /// </summary>
-	internal partial class CustomLookupField : BaseCustomField<LookupField>
+	internal class CustomLookupField : BaseCustomField<LookupField>
 	{
 		internal CustomLookupField(Item item, LookupField field) : base(item, field)
 		{

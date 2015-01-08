@@ -20,7 +20,6 @@ namespace Sitecore.SharedSource.DynamicSites.Events
         ///             </param><param name="args">The arguments.
         ///             </param>
         /// 
-        /// TODO: Add Rename Event
 
         [UsedImplicitly]
         internal void OnItemDeleted(object sender, EventArgs args)

@@ -32,9 +32,26 @@
     <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Sitecore.Buckets">
+      <HintPath>..\References\Sitecore 7.5\Sitecore.Buckets.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sitecore.ContentSearch">
+      <HintPath>..\References\Sitecore 7.5\Sitecore.ContentSearch.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sitecore.ContentSearch.Client">
+      <HintPath>..\References\Sitecore 7.5\Sitecore.ContentSearch.Client.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sitecore.ContentSearch.Linq">
+      <HintPath>..\References\Sitecore 7.5\Sitecore.ContentSearch.Linq.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Sitecore.Kernel, Version=7.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\Sitecore 7.5\Sitecore.Kernel.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -49,13 +66,26 @@
   <ItemGroup>
     <Compile Include="Caching\SiteCache.cs" />
     <Compile Include="Caching\SiteCacheItem.cs" />
+    <Compile Include="Controls\ValueListLookup.cs" />
+    <Compile Include="Data\LookupSources.cs" />
     <Compile Include="Events\ItemHandler.cs" />
     <Compile Include="Events\ItemRenamedEventArgs.cs" />
     <Compile Include="Fields\BaseCustomField.cs" />
+    <Compile Include="Fields\Datasources\Databases.cs" />
+    <Compile Include="Fields\Datasources\Inherits.cs" />
+    <Compile Include="Fields\Datasources\Language.cs" />
     <Compile Include="Fields\LinkTypes\CustomLookupField.cs" />
+    <Compile Include="Fields\ListTypes\CustomDroplistField.cs" />
+    <Compile Include="Fields\ListTypes\CustomMultiListField.cs" />
+    <Compile Include="Fields\ListTypes\CustomNameValueList.cs" />
+    <Compile Include="Fields\SimpleTypes\CustomCheckboxField.cs" />
     <Compile Include="Fields\SimpleTypes\CustomTextField.cs" />
     <Compile Include="Items\BaseTemplates\DynamicSiteDefinitionBaseItem.base.cs" />
     <Compile Include="Items\ModuleSettings\DynamicSiteSettingsItem.base.cs" />
+    <Compile Include="Pipelines\GetLookupSourceValueLists\CustomCodeSource.cs" />
+    <Compile Include="Pipelines\GetLookupSourceValueLists\DelimitedListSource.cs" />
+    <Compile Include="Pipelines\GetLookupSourceValueLists\GetLookupSourceValueListsArgs.cs" />
+    <Compile Include="Pipelines\GetLookupSourceValueLists\IValueList.cs" />
     <Compile Include="Pipelines\Loader\InitializeDynamicSites.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sites\DynamicSitesProvider.cs" />

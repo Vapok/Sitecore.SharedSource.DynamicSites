@@ -55,8 +55,13 @@ namespace Sitecore.SharedSource.DynamicSites.Sites
                 foreach (var site in configProvider.GetSites())
                 {
                     var info = new SiteInfo(site.Properties);
+                    
+                    //If site has been set to not active, then remove it from Provider.
+                    if (!info.IsActive) continue;
+
                     if (string.IsNullOrEmpty(info.HostName) &&
-                        (string.IsNullOrEmpty(info.VirtualFolder) || info.VirtualFolder.Equals("/")))
+                        (string.IsNullOrEmpty(info.VirtualFolder) || info.VirtualFolder.Equals("/")) && 
+                            string.IsNullOrEmpty(info.StartItem))
                     {
                         if (!deferredList.Contains(site.Name))
                             deferredList.Add(site.Name);
@@ -76,8 +81,13 @@ namespace Sitecore.SharedSource.DynamicSites.Sites
                 //Ignore Website and any other site that doesn't have a hostname or a Virtual Folder from Config provider.
 
                 var info = new SiteInfo(site.Properties);
+
+                //If site has been set to not active, then remove it from Provider.
+                if (!info.IsActive) continue;
+                
                 if (string.IsNullOrEmpty(info.HostName) &&
-                    (string.IsNullOrEmpty(info.VirtualFolder) || info.VirtualFolder.Equals("/")))
+                    (string.IsNullOrEmpty(info.VirtualFolder) || info.VirtualFolder.Equals("/")) &&
+                    string.IsNullOrEmpty(info.StartItem))
                 {
                     if (!deferredList.Contains(site.Name))
                         deferredList.Add(site.Name);

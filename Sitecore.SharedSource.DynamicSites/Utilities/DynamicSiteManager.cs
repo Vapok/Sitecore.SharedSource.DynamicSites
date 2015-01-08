@@ -7,20 +7,22 @@ using Sitecore.SecurityModel;
 using Sitecore.SharedSource.DynamicSites.Items.BaseTemplates;
 using Sitecore.Sites;
 using Sitecore.StringExtensions;
+using Sitecore.Web;
 
 namespace Sitecore.SharedSource.DynamicSites.Utilities
 {
     internal static class DynamicSiteManager
     {
-
         public static void AddBaseTemplate([NotNull] TemplateItem item)
         {
-
             var template = DynamicSiteSettings.BaseSiteDefinitionTemplateItem;
             
+            //Do Nothing If Template Is Self
+            if (template.ID.Equals(item.ID)) return;
+
             //Get List of Existing Base Templates
             var existingTemplates = GetBaseTemplates(item);
-
+            
             //Double check Base Template doesn't already exist.
             if (HasBaseTemplate(item)) return;
 
@@ -35,6 +37,9 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
         {
 
             var template = DynamicSiteSettings.BaseSiteDefinitionTemplateItem;
+
+            //Do Nothing If Template Is Self
+            if (template.ID.Equals(item.ID)) return;
 
             //Get List of Existing Base Templates
             var existingTemplates = GetBaseTemplates(item);
@@ -51,8 +56,10 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
 
         public static bool HasBaseTemplate([NotNull] Item item)
         {
+            var template = DynamicSiteSettings.BaseSiteDefinitionTemplateItem;
 
-            return HasBaseTemplate(item.Template);
+            //Check to see if Item is made of Template we want, else dig further.
+            return item.TemplateID.Equals(template.ID) || HasBaseTemplate(item.Template);
         }
 
         private static bool HasBaseTemplate([NotNull] TemplateItem item)
@@ -98,24 +105,37 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
             return true;
         }
 
-        public static bool InitializeSettings()
+        public static void InitializeSettings()
         {
             if (SettingsInitialized())
-                return true;
+                return;
             try
             {
                 var settingsItem = DynamicSiteSettings.GetSettingsItem;
-                if (settingsItem == null) return false;
+                if (settingsItem == null) return;
 
-                var websiteItem = SiteManager.GetSite("website") ?? SiteManager.GetSite(DynamicSiteSettings.SiteName);
+                var defaultItem = SiteManager.GetSite("website");
+                string rootPath;
+                string defaultPath;
 
-                var rootPath = websiteItem.Properties["rootPath"];
-                var defaultPath = rootPath + websiteItem.Properties["startItem"];
-                if (defaultPath.IsNullOrEmpty() || rootPath.IsNullOrEmpty()) return false;
+                if (defaultItem == null)
+                {
+                    //This is a fail safe, so that if the website definition has been removed
+                    //we can fall back to something.
+                    rootPath = "/sitecore/content";
+                    defaultPath = rootPath + "/Home";
+                }
+                else
+                {
+                    rootPath = defaultItem.Properties["rootPath"];
+                    defaultPath = rootPath + defaultItem.Properties["startItem"];
+                }
+
+                if (defaultPath.IsNullOrEmpty() || rootPath.IsNullOrEmpty()) return;
 
                 var siteFolderItem = DynamicSiteSettings.GetCurrentDatabase.GetItem(rootPath);
                 var siteItem = DynamicSiteSettings.GetCurrentDatabase.GetItem(defaultPath);
-                if (siteFolderItem == null || siteItem == null) return false;
+                if (siteFolderItem == null || siteItem == null) return;
 
                 try
                 {
@@ -126,21 +146,15 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
                         settingsItem.InnerItem[settingsItem.SiteDefinitionTemplate.Field.InnerField.ID] = siteItem.TemplateID.ToString();
                         settingsItem.InnerItem.Editing.EndEdit();
                     }
-
-                    return true;
-
                 }
                 catch (Exception e)
                 {
                     Log.Error(String.Format("Error Saving Initial Item State: {0}\r\n{1}", e.Message, e.StackTrace), e);
-                    return false;
                 }
-
             }
             catch (Exception e)
             {
                 Log.Error(String.Format("Error Initializing Dynamic Sites: {0}\r\n{1}", e.Message, e.StackTrace), e);
-                return false;
             }
         }
 
@@ -150,10 +164,39 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
             {
                 if (item.HomeItem.Item == null) return null;
                 var properties = new StringDictionary(defaultSite.Properties);
+
+                //Required Properties
+                properties["mode"] = item.SiteEnabled ? "on" : "off";
                 properties["name"] = item.Name;
                 properties["hostName"] = item.Hostname.Text;
                 properties["startItem"] = string.Format("/{0}", item.HomeItem.Item.Name);
                 properties["rootPath"] = item.HomeItem.Item.Parent.Paths.FullPath;
+                
+                //Enhanced Properties
+                if (!item.Language.Value.IsNullOrEmpty())
+                    properties["language"] = item.Language.Value;
+
+                if (!item.TargetHostName.Value.IsNullOrEmpty())
+                    properties["targetHostName"] = item.TargetHostName.Value;
+
+                if (!item.Port.Text.IsNullOrEmpty())
+                    properties["port"] = item.Port.Text;
+
+                if (!item.DatabaseName.Value.IsNullOrEmpty())
+                    properties["database"] = item.DatabaseName.Value;
+
+                if (!item.Inherit.Value.IsNullOrEmpty())
+                    properties["inherits"] = item.Inherit.Value;
+
+                properties["cacheHtml"] = item.CacheHtml.Checked.ToString();
+                properties["cacheMedia"] = item.CacheMedia.Checked.ToString();
+                properties["enableDebugger"] = item.EnableDebugger.Checked.ToString();
+                properties["enableAnalytics"] = item.EnableAnalytics.Checked.ToString();
+                
+                //Custom Properties
+                if (item.Properties.ToStringDictionary.Count> 0)
+                    properties.AddRange(item.Properties.ToStringDictionary);
+                
                 var newSite = new Site(item.Name, properties);
                 return newSite;
             }
@@ -182,8 +225,7 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
 
                         var dynamicSiteItem = (DynamicSiteDefinitionBaseItem)dynamicSite;
 
-                        if (dynamicSiteItem == null || dynamicSiteItem.HomeItem == null ||
-                            dynamicSiteItem.Hostname.Text.IsNullOrEmpty())
+                        if (dynamicSiteItem == null || dynamicSiteItem.HomeItem == null)
                         {
                             continue;
                         }
@@ -192,8 +234,10 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
                         if (newSite == null) continue;
 
                         if (sites.ContainsKey(newSite.Name)) continue;
-
-                        sites.Add(newSite.Name, newSite);
+                        
+                        var info = new SiteInfo(newSite.Properties);
+                        if (info.IsActive)
+                            sites.Add(newSite.Name, newSite);
                     }
                     catch (Exception e)
                     {
@@ -216,5 +260,21 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
                 DynamicSiteSettings.GetSiteCache.Clear();
         }
 
+        public static ItemCollection GetHomeItems()
+        {
+            var collection = new ItemCollection();
+
+            foreach (var site in DynamicSiteSettings.GetSiteCache.GetAllSites())
+            {
+                var info = new SiteInfo(site.Properties);
+                var context = new SiteContext(info);
+                var item = DynamicSiteSettings.GetCurrentDatabase.GetItem(context.StartPath);
+
+                if (item != null)
+                    collection.Add(item);
+            }
+
+            return collection;
+        }
     }
 }

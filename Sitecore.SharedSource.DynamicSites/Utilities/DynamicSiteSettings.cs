@@ -1,4 +1,5 @@
-﻿using Sitecore.Configuration;
+﻿using System.ComponentModel.Design.Serialization;
+using Sitecore.Configuration;
 using Sitecore.Data;
 using Sitecore.Data.Items;
 using Sitecore.SharedSource.DynamicSites.Caching;
@@ -79,8 +80,7 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
         {
             get
             {
-                if (Context.Database == null) return Database.GetDatabase("master");
-                return Context.Database.Name.Equals("core") ? Database.GetDatabase("master") : Context.Database;
+                return Context.ContentDatabase ?? Context.Database ?? Database.GetDatabase("master");
             }
         }
 

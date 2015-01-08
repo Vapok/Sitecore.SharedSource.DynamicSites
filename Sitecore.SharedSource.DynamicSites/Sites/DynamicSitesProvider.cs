@@ -7,6 +7,7 @@ using Sitecore.Diagnostics;
 using Sitecore.IO;
 using Sitecore.SharedSource.DynamicSites.Utilities;
 using Sitecore.Sites;
+using Sitecore.Web;
 using Sitecore.Xml;
 
 namespace Sitecore.SharedSource.DynamicSites.Sites

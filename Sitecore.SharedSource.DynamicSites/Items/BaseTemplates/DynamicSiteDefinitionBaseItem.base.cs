@@ -1,5 +1,6 @@
 using Sitecore.Data.Items;
 using Sitecore.SharedSource.DynamicSites.Fields.LinkTypes;
+using Sitecore.SharedSource.DynamicSites.Fields.ListTypes;
 using Sitecore.SharedSource.DynamicSites.Fields.SimpleTypes;
 
 namespace Sitecore.SharedSource.DynamicSites.Items.BaseTemplates
@@ -33,6 +34,15 @@ public static implicit operator Item(DynamicSiteDefinitionBaseItem customItem)
 #region Field Instance Methods
 
 
+public CustomCheckboxField SiteEnabled
+{
+	get
+	{
+		return new CustomCheckboxField(InnerItem, InnerItem.Fields["Site Enabled"]);
+	}
+}
+
+
 public CustomTextField Hostname
 {
 	get
@@ -42,12 +52,104 @@ public CustomTextField Hostname
 }
 
 
+//Could not find Field Type for Properties
+
+
 public CustomLookupField HomeItem
 {
 	get
 	{
 		return new CustomLookupField(InnerItem, InnerItem.Fields["Home Item"]);
 	}
+}
+
+
+public CustomDroplistField Language
+{
+	get
+	{
+        return new CustomDroplistField(InnerItem, InnerItem.Fields["Language"]);
+	}
+}
+
+
+public CustomDroplistField TargetHostName
+{
+	get
+	{
+        return new CustomDroplistField(InnerItem, InnerItem.Fields["Target Host Name"]);
+	}
+}
+
+
+public CustomTextField Port
+{
+	get
+	{
+		return new CustomTextField(InnerItem, InnerItem.Fields["Port"]);
+	}
+}
+
+
+public CustomDroplistField DatabaseName
+{
+	get
+	{
+        return new CustomDroplistField(InnerItem, InnerItem.Fields["Database"]);
+	}
+}
+
+
+public CustomCheckboxField CacheHtml
+{
+	get
+	{
+		return new CustomCheckboxField(InnerItem, InnerItem.Fields["Cache Html"]);
+	}
+}
+
+
+public CustomCheckboxField CacheMedia
+{
+	get
+	{
+		return new CustomCheckboxField(InnerItem, InnerItem.Fields["Cache Media"]);
+	}
+}
+
+
+public CustomCheckboxField EnableDebugger
+{
+	get
+	{
+		return new CustomCheckboxField(InnerItem, InnerItem.Fields["Enable Debugger"]);
+	}
+}
+
+
+public CustomCheckboxField EnableAnalytics
+{
+	get
+	{
+		return new CustomCheckboxField(InnerItem, InnerItem.Fields["Enable Analytics"]);
+	}
+}
+
+
+public CustomDroplistField Inherit
+{
+    get
+    {
+        return new CustomDroplistField(InnerItem, InnerItem.Fields["Inherit"]);
+    }
+}
+
+public CustomNameValueListField Properties
+{
+    get
+    {
+        return new CustomNameValueListField(InnerItem, InnerItem.Fields["Properties"]);
+    }
 }
 
 

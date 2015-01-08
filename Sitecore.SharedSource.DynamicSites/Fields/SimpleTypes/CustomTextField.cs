@@ -3,7 +3,7 @@ using Sitecore.Data.Items;
 
 namespace Sitecore.SharedSource.DynamicSites.Fields.SimpleTypes
 {
-	internal partial class CustomTextField : BaseCustomField<TextField>
+	internal class CustomTextField : BaseCustomField<TextField>
 	{
 		public CustomTextField(Item item, TextField field)
 			: base(item, field)
