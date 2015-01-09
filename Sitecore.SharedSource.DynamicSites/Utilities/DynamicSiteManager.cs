@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sitecore.Collections;
+using Sitecore.Configuration;
+using Sitecore.Data;
 using Sitecore.Data.Items;
+using Sitecore.Data.Managers;
 using Sitecore.Diagnostics;
+using Sitecore.Publishing;
 using Sitecore.SecurityModel;
 using Sitecore.SharedSource.DynamicSites.Items.BaseTemplates;
 using Sitecore.Sites;
@@ -31,6 +35,9 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
 
             //Save Item
             SaveItemBaseTemplates(item, existingTemplates);
+
+            //Publish Changes
+            PublishItemChanges(item);
         }
 
         public static void RemoveBaseTemplate([NotNull] TemplateItem item)
@@ -52,6 +59,24 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
                 
             //Save Item
             SaveItemBaseTemplates(item,existingTemplates);
+
+            //Publish Changes
+            PublishItemChanges(item);
+        }
+
+        public static void PublishItemChanges(Item item)
+        {
+            if (!DynamicSiteSettings.AutoPublish) return;
+
+            var targets = GetPublishingTargets();
+
+            if (targets.Length == 0) return;
+
+            var languages = LanguageManager.GetLanguages(Context.ContentDatabase);
+            if (languages == null || languages.Count == 0) return;
+
+            Log.Audit(string.Format("Publish item now: {0}", AuditFormatter.FormatItem(item)),typeof(DynamicSiteManager));
+            PublishManager.PublishItem(item, targets, languages.ToArray(), false, true);
         }
 
         public static bool HasBaseTemplate([NotNull] Item item)
@@ -146,6 +171,10 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
                         settingsItem.InnerItem[settingsItem.SiteDefinitionTemplate.Field.InnerField.ID] = siteItem.TemplateID.ToString();
                         settingsItem.InnerItem.Editing.EndEdit();
                     }
+
+                    //Publish Changes
+                    PublishItemChanges(settingsItem.InnerItem);
+
                 }
                 catch (Exception e)
                 {
@@ -276,5 +305,19 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
 
             return collection;
         }
+
+        public static Database[] GetPublishingTargets()
+        {
+            Item itemNotNull = Client.GetItemNotNull("/sitecore/system/publishing targets");
+            var arrayList = new List<Database>();
+            foreach (BaseItem baseItem in itemNotNull.Children)
+            {
+                Database database = Factory.GetDatabase(baseItem["Target database"], false);
+                if (database != null)
+                    arrayList.Add(database);
+            }
+            return Assert.ResultNotNull(arrayList.ToArray());
+        }
+
     }
 }

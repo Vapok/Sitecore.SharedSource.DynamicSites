@@ -68,12 +68,16 @@ namespace Sitecore.SharedSource.DynamicSites.Events
             DoBaseTemplateUpdates(obj, itemChanges);
         }
 
-        private void DoBaseTemplateUpdates([NotNull] Item item, ItemChanges itemChanges)
+        private static void DoBaseTemplateUpdates([NotNull] Item item, ItemChanges itemChanges)
         {
             var siteSettings = (DynamicSiteSettingsItem)item;
 
-            if (itemChanges == null || !itemChanges.IsFieldModified(siteSettings.SiteDefinitionTemplate.Field.InnerField.ID))
+            if (itemChanges == null ||
+                !itemChanges.IsFieldModified(siteSettings.SiteDefinitionTemplate.Field.InnerField.ID))
+            {
+                DynamicSiteManager.PublishItemChanges(item);
                 return;
+            }
 
             var changedField = itemChanges.FieldChanges[siteSettings.SiteDefinitionTemplate.Field.InnerField.ID];
             var oldValue = changedField.OriginalValue;
@@ -110,10 +114,10 @@ namespace Sitecore.SharedSource.DynamicSites.Events
             if (DynamicSiteSettings.Disabled) return;
 
             //If Item being deleted is a Dynamic Site, clear the Dynamic Site cache.
-            if (DynamicSiteManager.HasBaseTemplate(item))
-            {
-                DynamicSiteManager.ClearCache();
-            }
+            if (!DynamicSiteManager.HasBaseTemplate(item)) return;
+
+            DynamicSiteManager.PublishItemChanges(item);
+            DynamicSiteManager.ClearCache();
         }
     }
 }

@@ -33,6 +33,12 @@ Adds:
             Default: 50MB
       -->
       <setting name="DynamicSites.MaxCacheSize" value="50MB" />
+      <!--  Dynamic Sites - Auto Publish Site Changes
+            Automatically publish changes to site configuration.
+            Options: true/false
+            Default: true
+      -->
+      <setting name="DynamicSites.AutoPublish" value="true" />
     </settings>
     <events>
       <event name="item:saved">
@@ -50,8 +56,8 @@ Adds:
         <processor type="Sitecore.SharedSource.DynamicSites.Pipelines.Loader.InitializeDynamicSites, SharedSource.Sitecore.DynamicSites" />
       </initialize>
       <getLookupSourceValueLists>
-        <processor type="Sitecore.SharedSource.DynamicSites.Pipelines.GetLookupSourceValueLists.CustomCodeSource, SharedSource.Sitecore.DynamicSites" />
-        <processor type="Sitecore.SharedSource.DynamicSites.Pipelines.GetLookupSourceValueLists.DelimitedListSource, SharedSource.Sitecore.DynamicSites" />
+        <processor type="Sitecore.SharedSource.ValueListField.Pipelines.GetLookupSourceValueLists.CustomCodeSource, SharedSource.Sitecore.ValueListField" />
+        <processor type="Sitecore.SharedSource.ValueListField.Pipelines.GetLookupSourceValueLists.DelimitedListSource, SharedSource.Sitecore.ValueListField" />
       </getLookupSourceValueLists>
     </pipelines>
     <sites>
@@ -67,7 +73,7 @@ Adds:
       </providers>
     </siteManager>
     <controlSources>
-      <source mode="on" namespace="Sitecore.SharedSource.DynamicSites.Controls" assembly="SharedSource.Sitecore.DynamicSites" prefix="dynamic" />
+      <source mode="on" namespace="Sitecore.SharedSource.ValueListField.Controls" assembly="SharedSource.Sitecore.ValueListField" prefix="dynamic" />
     </controlSources>
     <dynamicsites>
       <defaultsite

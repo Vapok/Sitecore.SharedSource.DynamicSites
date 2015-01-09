@@ -32,17 +32,8 @@
     <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Sitecore.Buckets">
-      <HintPath>..\References\Sitecore 7.5\Sitecore.Buckets.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Sitecore.ContentSearch">
-      <HintPath>..\References\Sitecore 7.5\Sitecore.ContentSearch.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Sitecore.ContentSearch.Client">
-      <HintPath>..\References\Sitecore 7.5\Sitecore.ContentSearch.Client.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="SharedSource.Sitecore.ValueListField">
+      <HintPath>..\References\Sitecore.SharedSource.ValueListField\SharedSource.Sitecore.ValueListField.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.ContentSearch.Linq">
       <HintPath>..\References\Sitecore 7.5\Sitecore.ContentSearch.Linq.dll</HintPath>
@@ -57,17 +48,11 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Caching\SiteCache.cs" />
     <Compile Include="Caching\SiteCacheItem.cs" />
-    <Compile Include="Controls\ValueListLookup.cs" />
-    <Compile Include="Data\LookupSources.cs" />
     <Compile Include="Events\ItemHandler.cs" />
     <Compile Include="Events\ItemRenamedEventArgs.cs" />
     <Compile Include="Fields\BaseCustomField.cs" />
@@ -82,10 +67,6 @@
     <Compile Include="Fields\SimpleTypes\CustomTextField.cs" />
     <Compile Include="Items\BaseTemplates\DynamicSiteDefinitionBaseItem.base.cs" />
     <Compile Include="Items\ModuleSettings\DynamicSiteSettingsItem.base.cs" />
-    <Compile Include="Pipelines\GetLookupSourceValueLists\CustomCodeSource.cs" />
-    <Compile Include="Pipelines\GetLookupSourceValueLists\DelimitedListSource.cs" />
-    <Compile Include="Pipelines\GetLookupSourceValueLists\GetLookupSourceValueListsArgs.cs" />
-    <Compile Include="Pipelines\GetLookupSourceValueLists\IValueList.cs" />
     <Compile Include="Pipelines\Loader\InitializeDynamicSites.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sites\DynamicSitesProvider.cs" />
