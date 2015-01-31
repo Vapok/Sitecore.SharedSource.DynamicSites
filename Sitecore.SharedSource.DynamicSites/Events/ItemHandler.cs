@@ -3,7 +3,6 @@ using Sitecore.Data;
 using Sitecore.Data.Events;
 using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
-using Sitecore.Events;
 using Sitecore.SharedSource.DynamicSites.Items.ModuleSettings;
 using Sitecore.SharedSource.DynamicSites.Utilities;
 using Sitecore.StringExtensions;
@@ -48,24 +47,27 @@ namespace Sitecore.SharedSource.DynamicSites.Events
         {
             Assert.ArgumentNotNull(sender, "sender");
             Assert.ArgumentNotNull(args, "args");
-            var obj = Event.ExtractParameter(args, 0) as Item;
-            if (obj == null) return;
+            var arguments = args as ItemSavedEventArgs;
+            if (arguments == null) return;
+
+            var item = arguments.Item;
+            if (item == null) return;
 
             //Is Module Disabled at the config level?
             if (DynamicSiteSettings.Disabled) return;
             
             //Reset Cache if Item is Dynamic Site.
-            ResetDynamicSitesCache(obj);
+            ResetDynamicSitesCache(item);
             
             //If Item being saved is the Dynamic Site Settings Item, Make Updates
             //Return otherwise.
-            if (obj.TemplateID != new ID(DynamicSiteSettingsItem.TemplateId)) return;
+            if (item.TemplateID != new ID(DynamicSiteSettingsItem.TemplateId)) return;
 
             //Get ItemChanges
-            var itemChanges = Event.ExtractParameter(args, 1) as ItemChanges;
+            var itemChanges = arguments.Changes;
 
             //Do Base Template Updates to Activate Dynamic Sites
-            DoBaseTemplateUpdates(obj, itemChanges);
+            DoBaseTemplateUpdates(item, itemChanges);
         }
 
         private static void DoBaseTemplateUpdates([NotNull] Item item, ItemChanges itemChanges)

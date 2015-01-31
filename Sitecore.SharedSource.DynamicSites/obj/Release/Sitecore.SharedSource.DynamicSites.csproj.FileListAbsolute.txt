@@ -32,7 +32,7 @@ D:\Code\Modules\Dynamic Sites\Sitecore.SharedSource.DynamicSites\bin\Sitecore.Sh
 D:\Code\Modules\Dynamic Sites\Sitecore.SharedSource.DynamicSites\bin\Sitecore.Kernel.dll
 C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\bin\SharedSource.Sitecore.DynamicSites.dll
 C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\bin\SharedSource.Sitecore.DynamicSites.pdb
-C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\obj\Release\Sitecore.SharedSource.DynamicSites.csprojResolveAssemblyReference.cache
+C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\bin\SharedSource.Sitecore.ValueListField.dll
 C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\obj\Release\SharedSource.Sitecore.DynamicSites.dll
 C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\obj\Release\SharedSource.Sitecore.DynamicSites.pdb
-C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\bin\SharedSource.Sitecore.ValueListField.dll
+C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\obj\Release\Sitecore.SharedSource.DynamicSites.csprojResolveAssemblyReference.cache

@@ -72,7 +72,7 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
 
             if (targets.Length == 0) return;
 
-            var languages = LanguageManager.GetLanguages(Context.ContentDatabase);
+            var languages = LanguageManager.GetLanguages(DynamicSiteSettings.GetCurrentDatabase);
             if (languages == null || languages.Count == 0) return;
 
             Log.Audit(string.Format("Publish item now: {0}", AuditFormatter.FormatItem(item)),typeof(DynamicSiteManager));
@@ -289,26 +289,26 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
                 DynamicSiteSettings.GetSiteCache.Clear();
         }
 
-        public static ItemCollection GetHomeItems()
+        public static SiteContext GetSiteContextByContentItem(Item contentitem)
         {
-            var collection = new ItemCollection();
-
+            if (contentitem == null) return null;
             foreach (var site in DynamicSiteSettings.GetSiteCache.GetAllSites())
             {
-                var info = new SiteInfo(site.Properties);
-                var context = new SiteContext(info);
-                var item = DynamicSiteSettings.GetCurrentDatabase.GetItem(context.StartPath);
+                var context = new SiteContext(new SiteInfo(site.Properties));
+                var homeItem = DynamicSiteSettings.GetCurrentDatabase.GetItem(context.StartPath);
 
-                if (item != null)
-                    collection.Add(item);
+                if (homeItem == null) continue;
+                if (contentitem.Axes.IsDescendantOf(homeItem) || contentitem.ID.Equals(homeItem.ID))
+                {
+                    return context;
+                }
             }
-
-            return collection;
+            return null;
         }
 
         public static Database[] GetPublishingTargets()
         {
-            Item itemNotNull = Client.GetItemNotNull("/sitecore/system/publishing targets");
+            Item itemNotNull = Client.GetItemNotNull("/sitecore/system/publishing targets",DynamicSiteSettings.GetCurrentDatabase);
             var arrayList = new List<Database>();
             foreach (BaseItem baseItem in itemNotNull.Children)
             {
@@ -318,6 +318,5 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
             }
             return Assert.ResultNotNull(arrayList.ToArray());
         }
-
     }
 }
