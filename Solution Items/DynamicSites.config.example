@@ -1,0 +1,98 @@
+<!--
+
+Dynamic Sites Confiuration File
+Adds:
+1) Event Handlers to Update Custom Chosen Templates with Dynamic Sites Base Template
+2) Site Providers for both Dynamic Sites as well as a Switcher Provider.
+3) Dyanamic Site Default Settings. All Dynamic Sites will inherit from these default properties.
+4) 4 Sitecore Settings. Modify only if you know what you're doing.
+
+-->
+<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
+  <sitecore>
+    <settings>
+      <!--  Dynamic Sites - Disabled
+            Disables The Dynamic Sites Module without having to remove components.
+            Default: false
+      -->
+      <setting name="DynamicSites.Disabled" value="false" />
+      <!--  Dynamic Sites - Settings Item Path
+            Sets the path of the Default Dynamic Sites Setting Item.
+            Default: /sitecore/system/Modules/Dynamic Sites/Dynamic Site Settings
+            Can be moved as needed.
+      -->
+      <setting name="DynamicSites.SettingsItemPath" value="/sitecore/system/Modules/Dynamic Sites/Dynamic Site Settings" />
+      <!--  Dynamic Sites - Default Site Name
+            Sets the path of the Default Dynamic Sites Setting Item.
+            Default: /sitecore/system/Modules/Dynamic Sites/Dynamic Site Settings
+            Can be moved as needed.
+      -->
+      <setting name="DynamicSites.SiteName" value="dynamicsites" />
+      <!--  Dynamic Sites - Max Cache Size
+            Sets the max size of the Dynamic Sites Site Cache.
+            Default: 50MB
+      -->
+      <setting name="DynamicSites.MaxCacheSize" value="50MB" />
+      <!--  Dynamic Sites - Auto Publish Site Changes
+            Automatically publish changes to site configuration.
+            Options: true/false
+            Default: true
+      -->
+      <setting name="DynamicSites.AutoPublish" value="true" />
+    </settings>
+    <events>
+      <event name="item:saved">
+        <handler type="Sitecore.SharedSource.DynamicSites.Events.ItemHandler, SharedSource.Sitecore.DynamicSites" method="OnItemSaved" />
+      </event>
+      <event name="item:deleted">
+        <handler type="Sitecore.SharedSource.DynamicSites.Events.ItemHandler, SharedSource.Sitecore.DynamicSites" method="OnItemDeleted" />
+      </event>
+      <event name="item:renamed">
+        <handler type="Sitecore.SharedSource.DynamicSites.Events.ItemHandler, SharedSource.Sitecore.DynamicSites" method="OnItemRenamed" />
+      </event>
+    </events>
+    <pipelines>
+      <initialize>
+        <processor type="Sitecore.SharedSource.DynamicSites.Pipelines.Loader.InitializeDynamicSites, SharedSource.Sitecore.DynamicSites" />
+      </initialize>
+      <getLookupSourceValueLists>
+        <processor type="Sitecore.SharedSource.ValueListField.Pipelines.GetLookupSourceValueLists.CustomCodeSource, SharedSource.Sitecore.ValueListField" />
+        <processor type="Sitecore.SharedSource.ValueListField.Pipelines.GetLookupSourceValueLists.DelimitedListSource, SharedSource.Sitecore.ValueListField" />
+      </getLookupSourceValueLists>
+    </pipelines>
+    <sites>
+      <site name="website">
+        <patch:attribute name="mode">off</patch:attribute>
+      </site>
+    </sites>
+    <siteManager>
+      <patch:attribute name="defaultProvider">switcher</patch:attribute>
+      <providers>
+        <add name="dynamic" type="Sitecore.SharedSource.DynamicSites.Sites.DynamicSitesProvider, SharedSource.Sitecore.DynamicSites" siteConfig="dynamicsites" checkSecurity="false" />
+        <add name="switcher" type="Sitecore.SharedSource.DynamicSites.Sites.SwitcherSiteProvider, SharedSource.Sitecore.DynamicSites" checkSecurity="false" />
+      </providers>
+    </siteManager>
+    <controlSources>
+      <source mode="on" namespace="Sitecore.SharedSource.ValueListField.Controls" assembly="SharedSource.Sitecore.ValueListField" prefix="dynamic" />
+    </controlSources>
+    <commands>
+      <command name="item:preview">
+        <patch:attribute  name="type">Sitecore.SharedSource.DynamicSites.Commands.DynamicPreviewItem,SharedSource.Sitecore.DynamicSites</patch:attribute>
+      </command>
+    </commands>
+    <dynamicsites>
+      <defaultsite
+            virtualFolder="/"
+            physicalFolder="/"
+            database="web"
+            domain="extranet"
+            allowDebug="true"
+            cacheHtml="true"
+            htmlCacheSize="10MB"
+            enablePreview="true"
+            enableWebEdit="true"
+            enableDebugger="true"
+            disableClientData="false"/>
+    </dynamicsites>
+  </sitecore>
+</configuration>
