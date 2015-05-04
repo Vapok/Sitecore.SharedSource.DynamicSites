@@ -41,7 +41,7 @@
     </Reference>
     <Reference Include="Sitecore.Kernel, Version=7.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\inetpub\wwwroot\Sitecore8Sandbox\Website\bin\Sitecore.Kernel.dll</HintPath>
+      <HintPath>..\References\Sitecore 8\Sitecore.Kernel.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
