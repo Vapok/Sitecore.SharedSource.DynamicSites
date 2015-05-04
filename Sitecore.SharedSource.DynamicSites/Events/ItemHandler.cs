@@ -3,6 +3,7 @@ using Sitecore.Data;
 using Sitecore.Data.Events;
 using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
+using Sitecore.Events;
 using Sitecore.SharedSource.DynamicSites.Items.ModuleSettings;
 using Sitecore.SharedSource.DynamicSites.Utilities;
 using Sitecore.StringExtensions;
@@ -23,8 +24,14 @@ namespace Sitecore.SharedSource.DynamicSites.Events
         [UsedImplicitly]
         internal void OnItemDeleted(object sender, EventArgs args)
         {
-            var arguments = args as ItemDeletedEventArgs;
-            if (arguments == null) return;
+            Assert.ArgumentNotNull(sender, "sender");
+            Assert.ArgumentNotNull(args, "args");
+
+            var sitecoreArgs = args as SitecoreEventArgs;
+            if (sitecoreArgs == null) return;
+
+            var arguments = new ItemDeletedEventArgs((Item)sitecoreArgs.Parameters[0], (ID)sitecoreArgs.Parameters[1]);
+            
             if (arguments.Item == null) return;
 
             //Reset Caches
@@ -34,8 +41,14 @@ namespace Sitecore.SharedSource.DynamicSites.Events
         [UsedImplicitly]
         internal void OnItemRenamed(object sender, EventArgs args)
         {
-            var arguments = args as ItemRenamedEventArgs;
-            if (arguments == null) return;
+            Assert.ArgumentNotNull(sender, "sender");
+            Assert.ArgumentNotNull(args, "args");
+
+            var sitecoreArgs = args as SitecoreEventArgs;
+            if (sitecoreArgs == null) return;
+
+            var arguments = new ItemRenamedEventArgs((Item)sitecoreArgs.Parameters[0], (string) sitecoreArgs.Parameters[1]);
+
             if (arguments.Item == null) return;
 
             //Reset Caches
@@ -47,9 +60,12 @@ namespace Sitecore.SharedSource.DynamicSites.Events
         {
             Assert.ArgumentNotNull(sender, "sender");
             Assert.ArgumentNotNull(args, "args");
-            var arguments = args as ItemSavedEventArgs;
-            if (arguments == null) return;
 
+            var sitecoreArgs = args as SitecoreEventArgs;
+            if (sitecoreArgs == null) return;
+
+            var arguments = new ItemSavedEventArgs((Item)sitecoreArgs.Parameters[0], (ItemChanges)sitecoreArgs.Parameters[1]);
+            
             var item = arguments.Item;
             if (item == null) return;
 
