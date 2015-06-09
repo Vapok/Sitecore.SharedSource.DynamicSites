@@ -36,7 +36,7 @@ namespace Sitecore.SharedSource.DynamicSites.Fields.ListTypes
                 var dictionary = new StringDictionary();
                 foreach (var key in NameValues.AllKeys)
                 {
-                    dictionary.Add(key,NameValues[key]);
+                    dictionary.Add(key,NameValues[key].Replace("%2F","/"));
                 }
                 return dictionary;
             }

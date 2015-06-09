@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Sitecore.Collections;
 using Sitecore.Configuration;
 using Sitecore.Data;
+using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
 using Sitecore.Data.Managers;
 using Sitecore.Diagnostics;
@@ -125,9 +126,8 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
             if (settingsItem == null) return false;
 
             if (settingsItem.SiteDefinitionTemplate.Item == null) return false;
-            if (settingsItem.SitesFolder.Item == null) return false;
 
-            return true;
+            return settingsItem.SitesFolder.Item != null;
         }
 
         public static void InitializeSettings()
@@ -164,6 +164,7 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
 
                 try
                 {
+
                     using (new SecurityDisabler())
                     {
                         settingsItem.InnerItem.Editing.BeginEdit();
@@ -196,7 +197,7 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
 
                 //Required Properties
                 properties["mode"] = item.SiteEnabled ? "on" : "off";
-                properties["name"] = item.Name;
+                properties["name"] = CleanCacheKeyName(item.Name);
                 properties["hostName"] = item.Hostname.Text;
                 properties["startItem"] = string.Format("/{0}", item.HomeItem.Item.Name);
                 properties["rootPath"] = item.HomeItem.Item.Parent.Paths.FullPath;
@@ -226,7 +227,7 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
                 if (item.Properties.ToStringDictionary.Count> 0)
                     properties.AddRange(item.Properties.ToStringDictionary);
                 
-                var newSite = new Site(item.Name, properties);
+                var newSite = new Site(CleanCacheKeyName(item.Name), properties);
                 return newSite;
             }
             catch (Exception e)
@@ -237,10 +238,11 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
 
         }
 
-        public static SafeDictionary<string, Site> GetDynamicSitesDictionary(Site defaultSite)
+        public static List<KeyValuePair<string, Site>> GetDynamicSitesDictionary(Site defaultSite)
         {
             Assert.ArgumentNotNull(defaultSite, "defaultSite");
-            var sites = new SafeDictionary<string, Site>();
+            //var sites = new SafeDictionary<string, Site>();
+            var sites = new List<KeyValuePair<string, Site>>();
 
             var siteRoot = DynamicSiteSettings.SitesFolder;
             if (siteRoot == null) return sites;
@@ -262,17 +264,18 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
 
                         if (newSite == null) continue;
 
-                        if (sites.ContainsKey(newSite.Name)) continue;
-                        
+                        var siteKey =  CleanCacheKeyName(newSite.Name);
+
+                        if (sites.ContainsKeyInList(siteKey)) continue;
+
                         var info = new SiteInfo(newSite.Properties);
                         if (info.IsActive)
-                            sites.Add(newSite.Name, newSite);
+                            sites.AddSitePair(siteKey, newSite);
                     }
                     catch (Exception e)
                     {
                         Log.Error(String.Format("Error Fetching Dynamic Sites: {0}\r\n{1}", e.Message, e.StackTrace), e);
                     }
-
                 }
             }
             catch (Exception e)
@@ -281,6 +284,11 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
             }
 
             return sites;
+        }
+
+        internal static string CleanCacheKeyName(string siteName)
+        {
+            return siteName.Replace(" ", "_").Trim();
         }
 
         public static void ClearCache()

@@ -67,12 +67,14 @@
     <Compile Include="Fields\SimpleTypes\CustomTextField.cs" />
     <Compile Include="Items\BaseTemplates\DynamicSiteDefinitionBaseItem.base.cs" />
     <Compile Include="Items\ModuleSettings\DynamicSiteSettingsItem.base.cs" />
+    <Compile Include="Pipelines\HttpBeginRequest\SiteResolver.cs" />
     <Compile Include="Pipelines\Loader\InitializeDynamicSites.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sites\DynamicSitesProvider.cs" />
     <Compile Include="Sites\SwitcherSiteProvider.cs" />
     <Compile Include="Utilities\DynamicSiteManager.cs" />
     <Compile Include="Utilities\DynamicSiteSettings.cs" />
+    <Compile Include="Utilities\ExtensionMethods.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

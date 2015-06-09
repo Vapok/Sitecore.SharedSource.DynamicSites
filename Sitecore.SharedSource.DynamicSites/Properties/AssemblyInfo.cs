@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Sitecore.SharedSource.DynamicSites")]
 [assembly: AssemblyDescription("Dynamic Sites for Sitecore")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Agency Oasis")]
+[assembly: AssemblyCompany("XCentium")]
 [assembly: AssemblyProduct("Sitecore")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2014")]
 [assembly: AssemblyTrademark("")]
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.5.0.0")]
-[assembly: AssemblyFileVersion("1.5.0.0")]
+[assembly: AssemblyVersion("1.7.0.0")]
+[assembly: AssemblyFileVersion("1.7.0.0")]

@@ -34,8 +34,19 @@ namespace Sitecore.SharedSource.DynamicSites.Events
             
             if (arguments.Item == null) return;
 
-            //Reset Caches
-            ResetDynamicSitesCache(arguments.Item);
+            try
+            {
+                //Reset Caches
+                ResetDynamicSitesCache(arguments.Item);
+            }
+            catch (NullReferenceException)
+            {
+                //Do nothing. 
+            }
+            catch (Exception e)
+            {
+                Log.Error(String.Format("[DynamicSites] Error: {0} \r\n Stack: {1}", e.Message, e.StackTrace), e);
+            }
         }
 
         [UsedImplicitly]
@@ -51,8 +62,19 @@ namespace Sitecore.SharedSource.DynamicSites.Events
 
             if (arguments.Item == null) return;
 
-            //Reset Caches
-            ResetDynamicSitesCache(arguments.Item);
+            try
+            {
+                //Reset Caches
+                ResetDynamicSitesCache(arguments.Item);
+            }
+            catch (NullReferenceException)
+            {
+                //Do nothing. 
+            }
+            catch (Exception e)
+            {
+                Log.Error(String.Format("[DynamicSites] Error: {0} \r\n Stack: {1}", e.Message, e.StackTrace), e);
+            }
         }
 
         [UsedImplicitly]
@@ -71,19 +93,33 @@ namespace Sitecore.SharedSource.DynamicSites.Events
 
             //Is Module Disabled at the config level?
             if (DynamicSiteSettings.Disabled) return;
-            
-            //Reset Cache if Item is Dynamic Site.
-            ResetDynamicSitesCache(item);
-            
-            //If Item being saved is the Dynamic Site Settings Item, Make Updates
-            //Return otherwise.
-            if (item.TemplateID != new ID(DynamicSiteSettingsItem.TemplateId)) return;
 
-            //Get ItemChanges
-            var itemChanges = arguments.Changes;
+            try
+            {
+                //Skip if current database doesn't keep content items.
+                if (!Context.Database.HasContentItem) return;
 
-            //Do Base Template Updates to Activate Dynamic Sites
-            DoBaseTemplateUpdates(item, itemChanges);
+                //Reset Cache if Item is Dynamic Site.
+                ResetDynamicSitesCache(item);
+
+                //If Item being saved is the Dynamic Site Settings Item, Make Updates
+                //Return otherwise.
+                if (item.TemplateID != new ID(DynamicSiteSettingsItem.TemplateId)) return;
+
+                //Get ItemChanges
+                var itemChanges = arguments.Changes;
+
+                //Do Base Template Updates to Activate Dynamic Sites
+                DoBaseTemplateUpdates(item, itemChanges);
+            }
+            catch (NullReferenceException ne)
+            {
+                //Do nothing. 
+            }
+            catch (Exception e)
+            {
+                Log.Error(String.Format("[DynamicSites] Error: {0} \r\n Stack: {1}",e.Message,e.StackTrace),e);
+            }
         }
 
         private static void DoBaseTemplateUpdates([NotNull] Item item, ItemChanges itemChanges)

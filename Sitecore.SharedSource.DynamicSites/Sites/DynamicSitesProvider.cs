@@ -1,7 +1,7 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Xml;
-using Sitecore.Collections;
 using Sitecore.Configuration;
 using Sitecore.Diagnostics;
 using Sitecore.IO;
@@ -16,21 +16,19 @@ namespace Sitecore.SharedSource.DynamicSites.Sites
     {
         private string _dynamicConfigPath;
         private SiteCollection _sites;
-        private SafeDictionary<string, Site> _dynamicSiteDictionary;
+        private List<KeyValuePair<string, Site>> _dynamicSiteDictionary;
  
         public override Site GetSite(string siteName)
         {
             Assert.ArgumentNotNullOrEmpty(siteName,"siteName");
             InitializeSites();
-            return _dynamicSiteDictionary[siteName];
+            return _dynamicSiteDictionary.GetSiteByKey(DynamicSiteManager.CleanCacheKeyName(siteName));
         }
 
         public override SiteCollection GetSites()
         {
             InitializeSites();
-            var reverseSites = new SiteCollection();
-            reverseSites.AddRange(_sites.Reverse());
-            return reverseSites;
+            return _sites;
         }
 
         public override void Initialize(string name, NameValueCollection config)
@@ -76,11 +74,12 @@ namespace Sitecore.SharedSource.DynamicSites.Sites
             return new Site(DynamicSiteSettings.SiteName, attributeDictionary);
         }
 
-        private void AddInheritedProperties(Site site, SafeDictionary<string, Site> siteDictionary)
+        private void AddInheritedProperties(Site site, List<KeyValuePair<string, Site>> siteDictionary)
         {
             var index = site.Properties["inherits"];
-            var inheritedSite = siteDictionary[index];
-            Assert.IsNotNull(inheritedSite, "Could not find base site '{0}' for site '{1}'.", index, site.Name);
+            var inheritedSite = siteDictionary.GetSiteByKey(DynamicSiteManager.CleanCacheKeyName(index));
+
+            Assert.IsNotNull(inheritedSite, "Could not find base site '{0}' for site '{1}'.", DynamicSiteManager.CleanCacheKeyName(index), site.Name);
 
             foreach (var keyValuePair in inheritedSite.Properties.Where(keyValuePair => !site.Properties.ContainsKey(keyValuePair.Key)))
             {
@@ -88,7 +87,7 @@ namespace Sitecore.SharedSource.DynamicSites.Sites
             }
         }
 
-        private void ResolveInheritance(SiteCollection sites, SafeDictionary<string, Site> siteDictionary)
+        private void ResolveInheritance(SiteCollection sites, List<KeyValuePair<string, Site>> siteDictionary)
         {
             foreach (var site in sites.Where(site => !string.IsNullOrEmpty(site.Properties["inherits"])))
             {

@@ -1,6 +1,11 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/CodeInspection/Highlighting/AnalysisEnabled/@EntryValue">SOLUTION</s:String>
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
-  &lt;Assembly Path="C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\References\Sitecore 7.5\Sitecore.Kernel.dll" /&gt;&#xD;
-  &lt;Assembly Path="C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\References\Sitecore 7.5\Sitecore.ContentSearch.dll" /&gt;&#xD;
-  &lt;Assembly Path="C:\Users\pnavarra\Documents\GitHub\Sitecore.SharedSource.DynamicSites\References\Sitecore 7.5\Sitecore.ContentSearch.Client.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\inetpub\wwwroot\Sitecore8Sandbox\Website\bin\UCommerce.Sitecore.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\inetpub\wwwroot\Sitecore8Sandbox\Website\bin\UCommerce.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\inetpub\wwwroot\Sitecore8Sandbox\Website\bin\UCommerce.Infrastructure.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\inetpub\wwwroot\Sitecore8Sandbox\Website\bin\UCommerce.Pipelines.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Code\Dynamic Sites\References\Sitecore 8\Sitecore.Kernel.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\inetpub\wwwroot\Sitecore8Sandbox\Website\bin\Sitecore.Client.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Windows\Microsoft.NET\Framework\v4.0.30319\mscorlib.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.Design.Serialization;
-using Sitecore.Configuration;
+﻿using Sitecore.Configuration;
 using Sitecore.Data;
 using Sitecore.Data.Items;
 using Sitecore.SharedSource.DynamicSites.Caching;
