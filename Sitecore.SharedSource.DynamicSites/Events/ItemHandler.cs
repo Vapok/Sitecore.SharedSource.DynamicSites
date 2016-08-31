@@ -112,7 +112,7 @@ namespace Sitecore.SharedSource.DynamicSites.Events
                 //Do Base Template Updates to Activate Dynamic Sites
                 DoBaseTemplateUpdates(item, itemChanges);
             }
-            catch (NullReferenceException ne)
+            catch (NullReferenceException)
             {
                 //Do nothing. 
             }

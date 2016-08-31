@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Sitecore.Collections;
 using Sitecore.Configuration;
 using Sitecore.Data;
-using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
 using Sitecore.Data.Managers;
 using Sitecore.Diagnostics;

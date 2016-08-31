@@ -46,6 +46,8 @@ C:\Code\Dynamic Sites\Sitecore.SharedSource.DynamicSites\obj\Release\Sitecore.Sh
 D:\Code\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\bin\SharedSource.Sitecore.DynamicSites.dll
 D:\Code\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\bin\SharedSource.Sitecore.DynamicSites.pdb
 D:\Code\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\bin\SharedSource.Sitecore.ValueListField.dll
+D:\Code\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\bin\Sitecore.Abstractions.dll
+D:\Code\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\bin\Sitecore.ContentSearch.Linq.dll
 D:\Code\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\bin\Sitecore.Kernel.dll
 D:\Code\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\bin\Newtonsoft.Json.dll
 D:\Code\Sitecore.SharedSource.DynamicSites\Sitecore.SharedSource.DynamicSites\obj\Release\Sitecore.SharedSource.DynamicSites.csprojResolveAssemblyReference.cache
