@@ -38,7 +38,14 @@ Adds:
             Options: true/false
             Default: true
       -->
-      <setting name="DynamicSites.AutoPublish" value="true" />
+      <setting name="DynamicSites.AutoPublish" value="true"/>
+	  
+	  <setting name="Preview.ResolveSite">
+		<patch:attribute name="value">true</patch:attribute>
+      </setting>
+	  <setting name="Preview.DefaultSite">
+		<patch:attribute name="value">website</patch:attribute>
+      </setting>
     </settings>
     <events>
       <event name="item:saved">
@@ -52,9 +59,6 @@ Adds:
       </event>
     </events>
     <pipelines>
-      <initialize>
-        <processor type="Sitecore.SharedSource.DynamicSites.Pipelines.Loader.InitializeDynamicSites, SharedSource.Sitecore.DynamicSites" />
-      </initialize>
       <getLookupSourceValueLists>
         <processor type="Sitecore.SharedSource.ValueListField.Pipelines.GetLookupSourceValueLists.CustomCodeSource, SharedSource.Sitecore.ValueListField" />
         <processor type="Sitecore.SharedSource.ValueListField.Pipelines.GetLookupSourceValueLists.DelimitedListSource, SharedSource.Sitecore.ValueListField" />
@@ -64,6 +68,8 @@ Adds:
       <site name="website">
         <patch:attribute name="mode">on</patch:attribute>
         <patch:attribute name="hostName">disabled.local</patch:attribute>
+		<patch:attribute name="rootPath">/sitecore/content</patch:attribute>
+		<patch:attribute name="startItem">/disabled</patch:attribute>
       </site>
     </sites>
     <siteManager>
