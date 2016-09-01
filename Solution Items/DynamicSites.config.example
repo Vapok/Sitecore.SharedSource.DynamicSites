@@ -39,12 +39,12 @@ Adds:
             Default: true
       -->
       <setting name="DynamicSites.AutoPublish" value="true"/>
-	  
-	  <setting name="Preview.ResolveSite">
-		<patch:attribute name="value">true</patch:attribute>
+
+      <setting name="Preview.ResolveSite">
+        <patch:attribute name="value">true</patch:attribute>
       </setting>
-	  <setting name="Preview.DefaultSite">
-		<patch:attribute name="value">website</patch:attribute>
+      <setting name="Preview.DefaultSite">
+        <patch:attribute name="value">website</patch:attribute>
       </setting>
     </settings>
     <events>
@@ -68,25 +68,20 @@ Adds:
       <site name="website">
         <patch:attribute name="mode">on</patch:attribute>
         <patch:attribute name="hostName">disabled.local</patch:attribute>
-		<patch:attribute name="rootPath">/sitecore/content</patch:attribute>
-		<patch:attribute name="startItem">/disabled</patch:attribute>
+        <patch:attribute name="rootPath">/sitecore/content</patch:attribute>
+        <patch:attribute name="startItem">/disabled</patch:attribute>
       </site>
     </sites>
     <siteManager>
       <patch:attribute name="defaultProvider">switcher</patch:attribute>
       <providers>
         <add name="dynamic" type="Sitecore.SharedSource.DynamicSites.Sites.DynamicSitesProvider, SharedSource.Sitecore.DynamicSites" siteConfig="dynamicsites" checkSecurity="false" />
-        <add name="switcher" type="Sitecore.SharedSource.DynamicSites.Sites.SwitcherSiteProvider, SharedSource.Sitecore.DynamicSites" checkSecurity="false" />
+        <add name="switcher" type="Sitecore.SharedSource.DynamicSites.Sites.SwitcherSiteProvider, SharedSource.Sitecore.DynamicSites" checkSecurity="false" resolve="true" />
       </providers>
     </siteManager>
     <controlSources>
       <source mode="on" namespace="Sitecore.SharedSource.ValueListField.Controls" assembly="SharedSource.Sitecore.ValueListField" prefix="dynamic" />
     </controlSources>
-    <commands>
-      <command name="item:preview">
-        <patch:attribute  name="type">Sitecore.SharedSource.DynamicSites.Commands.DynamicPreviewItem,SharedSource.Sitecore.DynamicSites</patch:attribute>
-      </command>
-    </commands>
     <dynamicsites>
       <defaultsite
             virtualFolder="/"

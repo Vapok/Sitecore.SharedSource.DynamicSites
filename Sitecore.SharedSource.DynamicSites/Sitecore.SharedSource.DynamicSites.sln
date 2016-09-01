@@ -1,11 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sitecore.SharedSource.DynamicSites", "Sitecore.SharedSource.DynamicSites.csproj", "{F920400E-5086-40AC-B9D1-3184179D7E9A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{924033F2-7382-4BB2-8B65-E85AAF40A10C}"
 	ProjectSection(SolutionItems) = preProject
 		..\Solution Items\DynamicSites.config = ..\Solution Items\DynamicSites.config
+		..\Solution Items\DynamicSites.config.example = ..\Solution Items\DynamicSites.config.example
 	EndProjectSection
 EndProject
 Global

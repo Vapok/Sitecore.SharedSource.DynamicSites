@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Sitecore.Configuration;
-using Sitecore.DependencyInjection;
+﻿using Sitecore.Configuration;
 using Sitecore.Diagnostics;
 using System;
 using System.Collections.Generic;
@@ -17,26 +15,12 @@ namespace Sitecore.SharedSource.DynamicSites.Sites
     {
         //Create Dynamic Site Cache
         private readonly SiteCache _siteCache = DynamicSiteSettings.GetSiteCache;
+        private readonly ProviderHelper<SiteProvider, SiteProviderCollection> _providerHelper;
         private static readonly List<string> OrderedList = new List<string>();
-        private readonly object _lockObj = new object();
-        private static SiteProviderCollection _providers;
 
-        private SiteProviderCollection Providers
+        public SwitcherSiteProvider(ProviderHelper<SiteProvider, SiteProviderCollection> providerHelper)
         {
-            get
-            {
-                if (_providers == null)
-                    lock (_lockObj)
-                        if (_providers == null)
-                            _providers = GetProviders();
-
-                return _providers;
-            }
-        }
-
-        private SiteProviderCollection GetProviders()
-        {
-            return ServiceLocator.ServiceProvider.GetRequiredService<ProviderHelper<SiteProvider, SiteProviderCollection>>().Providers;
+            _providerHelper = providerHelper;
         }
 
         public override Site GetSite(string siteName)
@@ -67,7 +51,7 @@ namespace Sitecore.SharedSource.DynamicSites.Sites
             SiteContextFactory.Reset();
 
             //Ininitalize The Cache based off of all Site Providers
-            foreach (var site in from SiteProvider siteProvider in Providers
+            foreach (var site in from SiteProvider siteProvider in _providerHelper.Providers
                                  where string.Compare(siteProvider.Name, Name, StringComparison.InvariantCultureIgnoreCase) != 0
                                  from site in siteProvider.GetSites()
                                  select site)
