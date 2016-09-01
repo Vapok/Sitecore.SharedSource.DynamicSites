@@ -51,7 +51,7 @@ namespace Sitecore.SharedSource.DynamicSites.Caching
             return InnerCache.ContainsKey(siteItem.Name);
         }
 
-        public bool ContainsSite(string name)
+        private bool ContainsSite(string name)
         {
             return InnerCache.ContainsKey(name);
         }

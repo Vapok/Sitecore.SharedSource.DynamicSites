@@ -18,13 +18,6 @@ namespace Sitecore.SharedSource.DynamicSites.Fields.LinkTypes
 			return lookupField.Item;
 		}
 
-		public Item Item
-		{
-			get
-			{
-				if(field == null) return null;
-				return field.TargetItem;
-			}
-		}
+		public Item Item => field?.TargetItem;
 	}
 }

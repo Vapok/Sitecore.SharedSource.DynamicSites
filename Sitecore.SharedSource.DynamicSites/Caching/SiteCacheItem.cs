@@ -17,17 +17,9 @@ namespace Sitecore.SharedSource.DynamicSites.Caching
             return TypeUtil.SizeOfDictionary();
         }
 
-        private bool _cacheable = true;
-        public bool Cacheable
-        {
-            get { return _cacheable; }
-            set { _cacheable = value; }
-        }
+        public bool Cacheable { get; set; } = true;
 
-        public bool Immutable
-        {
-            get { return true; }
-        }
+        public bool Immutable => true;
 
         public event DataLengthChangedDelegate DataLengthChanged;
     }

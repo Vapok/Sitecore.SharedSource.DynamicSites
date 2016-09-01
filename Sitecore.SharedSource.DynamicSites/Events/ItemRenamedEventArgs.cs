@@ -8,31 +8,16 @@ namespace Sitecore.SharedSource.DynamicSites.Events
     //Makes it unable to cast class.
     public class ItemRenamedEventArgs : EventArgs
     {
-        private Item m_item;
-        private string m_oldName;
+        public Item Item { get; }
 
-        public Item Item
-        {
-            get
-            {
-                return m_item;
-            }
-        }
-
-        public string OldName
-        {
-            get
-            {
-                return m_oldName;
-            }
-        }
+        public string OldName { get; }
 
         public ItemRenamedEventArgs(Item item, string oldName)
         {
             Error.AssertObject(item, "item");
             Error.AssertString(oldName, "oldName", false);
-            m_item = item;
-            m_oldName = oldName;
+            Item = item;
+            OldName = oldName;
         }
     }
 }

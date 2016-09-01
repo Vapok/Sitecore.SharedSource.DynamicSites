@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Sitecore.SharedSource.DynamicSites.Sites;
 using Sitecore.SharedSource.ValueListField.Pipelines.GetLookupSourceValueLists;
 using Sitecore.Sites;
 
@@ -9,7 +10,7 @@ namespace Sitecore.SharedSource.DynamicSites.Fields.Datasources
     {
         public string[] ValueListQuery()
         {
-            return SiteManager.Providers["dynamic"].GetSites().Select(site => site.Name).ToArray();
+            return SiteManager.GetSites().Select(site => site.Name).ToArray();
         }
     }
 }

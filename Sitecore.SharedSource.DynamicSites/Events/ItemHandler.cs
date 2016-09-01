@@ -45,7 +45,7 @@ namespace Sitecore.SharedSource.DynamicSites.Events
             }
             catch (Exception e)
             {
-                Log.Error(String.Format("[DynamicSites] Error: {0} \r\n Stack: {1}", e.Message, e.StackTrace), e);
+                Log.Error($"[DynamicSites] Error: {e.Message} \r\n Stack: {e.StackTrace}", e);
             }
         }
 
@@ -62,6 +62,8 @@ namespace Sitecore.SharedSource.DynamicSites.Events
 
             if (arguments.Item == null) return;
 
+            if (arguments.Item.Name.Equals(arguments.OldName)) return;
+
             try
             {
                 //Reset Caches
@@ -73,7 +75,7 @@ namespace Sitecore.SharedSource.DynamicSites.Events
             }
             catch (Exception e)
             {
-                Log.Error(String.Format("[DynamicSites] Error: {0} \r\n Stack: {1}", e.Message, e.StackTrace), e);
+                Log.Error($"[DynamicSites] Error: {e.Message} \r\n Stack: {e.StackTrace}", e);
             }
         }
 
@@ -118,7 +120,7 @@ namespace Sitecore.SharedSource.DynamicSites.Events
             }
             catch (Exception e)
             {
-                Log.Error(String.Format("[DynamicSites] Error: {0} \r\n Stack: {1}",e.Message,e.StackTrace),e);
+                Log.Error($"[DynamicSites] Error: {e.Message} \r\n Stack: {e.StackTrace}",e);
             }
         }
 

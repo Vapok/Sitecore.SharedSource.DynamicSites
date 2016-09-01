@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Sitecore.Configuration;
+using Sitecore.DependencyInjection;
+using Sitecore.Diagnostics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sitecore.Diagnostics;
 using Sitecore.SharedSource.DynamicSites.Caching;
 using Sitecore.SharedSource.DynamicSites.Utilities;
 using Sitecore.Sites;
@@ -12,9 +15,29 @@ namespace Sitecore.SharedSource.DynamicSites.Sites
     [UsedImplicitly]
     public class SwitcherSiteProvider : SiteProvider
     {
-        //Create Sitecore Cache
+        //Create Dynamic Site Cache
         private readonly SiteCache _siteCache = DynamicSiteSettings.GetSiteCache;
-        private static readonly List<string> OrderedList = new List<string>(); 
+        private static readonly List<string> OrderedList = new List<string>();
+        private readonly object _lockObj = new object();
+        private static SiteProviderCollection _providers;
+
+        private SiteProviderCollection Providers
+        {
+            get
+            {
+                if (_providers == null)
+                    lock (_lockObj)
+                        if (_providers == null)
+                            _providers = GetProviders();
+
+                return _providers;
+            }
+        }
+
+        private SiteProviderCollection GetProviders()
+        {
+            return ServiceLocator.ServiceProvider.GetRequiredService<ProviderHelper<SiteProvider, SiteProviderCollection>>().Providers;
+        }
 
         public override Site GetSite(string siteName)
         {
@@ -43,39 +66,11 @@ namespace Sitecore.SharedSource.DynamicSites.Sites
             //Reset SiteContextFactory so that static variables clear.
             SiteContextFactory.Reset();
 
-            //For Sitecore 7, Need to load Config Provider First.
-            //For Sitecore 8, this is resolved. The difference is that in 8, there's a provider called "sitecore".
-            //If the "sitecore" provider exists, we don't need to make any changes.
-            //If it doesn't, then we're running Sitecore 7 and need to load some config sites first.
-            var sitecoreProvider = SiteManager.Providers["sitecore"];
-            if (sitecoreProvider == null)
-            {
-                //Sitecore 7
-                var configProvider = SiteManager.Providers["config"];
-                foreach (var site in configProvider.GetSites())
-                {
-                    var info = new SiteInfo(site.Properties);
-                    
-                    //If site has been set to not active, then remove it from Provider.
-                    if (!info.IsActive) continue;
-
-                    if (string.IsNullOrEmpty(info.HostName) &&
-                        (string.IsNullOrEmpty(info.VirtualFolder) || info.VirtualFolder.Equals("/")) && 
-                            string.IsNullOrEmpty(info.StartItem))
-                    {
-                        if (!deferredList.Contains(site.Name))
-                            deferredList.Add(site.Name);
-                    }
-                    else
-                    {
-                        if (!OrderedList.Contains(site.Name))
-                            OrderedList.Add(site.Name);
-                    }
-                }
-            }
-           
             //Ininitalize The Cache based off of all Site Providers
-            foreach (var site in from SiteProvider siteProvider in SiteManager.Providers where string.Compare(siteProvider.Name, Name, StringComparison.InvariantCultureIgnoreCase) != 0 from site in siteProvider.GetSites() select site)
+            foreach (var site in from SiteProvider siteProvider in Providers
+                                 where string.Compare(siteProvider.Name, Name, StringComparison.InvariantCultureIgnoreCase) != 0
+                                 from site in siteProvider.GetSites()
+                                 select site)
             {
                 //Have to show Sitecore Sites in front of website first.
                 //Ignore Website and any other site that doesn't have a hostname or a Virtual Folder from Config provider.

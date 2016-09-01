@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sitecore.Collections;
 using Sitecore.Configuration;
 using Sitecore.Data;
@@ -75,7 +76,7 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
             var languages = LanguageManager.GetLanguages(DynamicSiteSettings.GetCurrentDatabase);
             if (languages == null || languages.Count == 0) return;
 
-            Log.Audit(string.Format("Publish item now: {0}", AuditFormatter.FormatItem(item)),typeof(DynamicSiteManager));
+            Log.Audit($"Publish item now: {AuditFormatter.FormatItem(item)}",typeof(DynamicSiteManager));
             PublishManager.PublishItem(item, targets, languages.ToArray(), false, true);
         }
 
@@ -115,16 +116,15 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
             }
             catch (Exception e)
             {
-                Log.Error(String.Format("Error Saving Item Base Template for Dynamic Site: {0}\r\n{1}", e.Message, e.StackTrace), e);
+                Log.Error($"Error Saving Item Base Template for Dynamic Site: {e.Message}\r\n{e.StackTrace}", e);
             }
         }
 
         public static bool SettingsInitialized()
         {
             var settingsItem = DynamicSiteSettings.GetSettingsItem;
-            if (settingsItem == null) return false;
 
-            if (settingsItem.SiteDefinitionTemplate.Item == null) return false;
+            if (settingsItem?.SiteDefinitionTemplate.Item == null) return false;
 
             return settingsItem.SitesFolder.Item != null;
         }
@@ -178,12 +178,12 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
                 }
                 catch (Exception e)
                 {
-                    Log.Error(String.Format("Error Saving Initial Item State: {0}\r\n{1}", e.Message, e.StackTrace), e);
+                    Log.Error($"Error Saving Initial Item State: {e.Message}\r\n{e.StackTrace}", e);
                 }
             }
             catch (Exception e)
             {
-                Log.Error(String.Format("Error Initializing Dynamic Sites: {0}\r\n{1}", e.Message, e.StackTrace), e);
+                Log.Error($"Error Initializing Dynamic Sites: {e.Message}\r\n{e.StackTrace}", e);
             }
         }
 
@@ -192,14 +192,15 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
             try
             {
                 if (item.HomeItem.Item == null) return null;
-                var properties = new StringDictionary(defaultSite.Properties);
-
-                //Required Properties
-                properties["mode"] = item.SiteEnabled ? "on" : "off";
-                properties["name"] = CleanCacheKeyName(item.Name);
-                properties["hostName"] = item.Hostname.Text;
-                properties["startItem"] = string.Format("/{0}", item.HomeItem.Item.Name);
-                properties["rootPath"] = item.HomeItem.Item.Parent.Paths.FullPath;
+                var properties = new StringDictionary(defaultSite.Properties)
+                {
+                    //Required Properties
+                    ["mode"] = item.SiteEnabled ? "on" : "off",
+                    ["name"] = CleanCacheKeyName(item.Name),
+                    ["hostName"] = item.Hostname.Text,
+                    ["startItem"] = $"/{item.HomeItem.Item.Name}",
+                    ["rootPath"] = item.HomeItem.Item.Parent.Paths.FullPath
+                };
                 
                 //Enhanced Properties
                 if (!item.Language.Value.IsNullOrEmpty())
@@ -231,7 +232,7 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
             }
             catch (Exception e)
             {
-                Log.Error(String.Format("Error Creating Dynamic Site Definition: {0}\r\n{1}",e.Message,e.StackTrace),e);
+                Log.Error($"Error Creating Dynamic Site Definition: {e.Message}\r\n{e.StackTrace}",e);
                 return null;
             }
 
@@ -240,7 +241,6 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
         public static List<KeyValuePair<string, Site>> GetDynamicSitesDictionary(Site defaultSite)
         {
             Assert.ArgumentNotNull(defaultSite, "defaultSite");
-            //var sites = new SafeDictionary<string, Site>();
             var sites = new List<KeyValuePair<string, Site>>();
 
             var siteRoot = DynamicSiteSettings.SitesFolder;
@@ -255,7 +255,7 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
 
                         var dynamicSiteItem = (DynamicSiteDefinitionBaseItem)dynamicSite;
 
-                        if (dynamicSiteItem == null || dynamicSiteItem.HomeItem == null)
+                        if (dynamicSiteItem?.HomeItem == null)
                         {
                             continue;
                         }
@@ -273,13 +273,13 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
                     }
                     catch (Exception e)
                     {
-                        Log.Error(String.Format("Error Fetching Dynamic Sites: {0}\r\n{1}", e.Message, e.StackTrace), e);
+                        Log.Error($"Error Fetching Dynamic Sites: {e.Message}\r\n{e.StackTrace}", e);
                     }
                 }
             }
             catch (Exception e)
             {
-                Log.Error(String.Format("Error in Dynamic Sites: {0}\r\n{1}", e.Message, e.StackTrace), e);
+                Log.Error($"Error in Dynamic Sites: {e.Message}\r\n{e.StackTrace}", e);
             }
 
             return sites;
@@ -299,21 +299,16 @@ namespace Sitecore.SharedSource.DynamicSites.Utilities
         public static SiteContext GetSiteContextByContentItem(Item contentitem)
         {
             if (contentitem == null) return null;
-            foreach (var site in DynamicSiteSettings.GetSiteCache.GetAllSites())
-            {
-                var context = new SiteContext(new SiteInfo(site.Properties));
-                var homeItem = DynamicSiteSettings.GetCurrentDatabase.GetItem(context.StartPath);
-
-                if (homeItem == null) continue;
-                if (contentitem.Axes.IsDescendantOf(homeItem) || contentitem.ID.Equals(homeItem.ID))
-                {
-                    return context;
-                }
-            }
-            return null;
+            return (from site in DynamicSiteSettings.GetSiteCache.GetAllSites()
+                    select new SiteContext(new SiteInfo(site.Properties)) 
+                    into context
+                    let homeItem = DynamicSiteSettings.GetCurrentDatabase.GetItem(context.StartPath)
+                    where homeItem != null
+                    where contentitem.Axes.IsDescendantOf(homeItem) || contentitem.ID.Equals(homeItem.ID)
+                    select context).FirstOrDefault();
         }
 
-        public static Database[] GetPublishingTargets()
+        private static Database[] GetPublishingTargets()
         {
             Item itemNotNull = Client.GetItemNotNull("/sitecore/system/publishing targets",DynamicSiteSettings.GetCurrentDatabase);
             var arrayList = new List<Database>();

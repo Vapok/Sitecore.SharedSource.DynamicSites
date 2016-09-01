@@ -33,6 +33,12 @@
     <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Extensions.DependencyInjection">
+      <HintPath>..\References\Sitecore 8.2\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
+      <HintPath>..\References\Sitecore 8.2\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="SharedSource.Sitecore.ValueListField">
       <HintPath>..\References\Sitecore.SharedSource.ValueListField\SharedSource.Sitecore.ValueListField.dll</HintPath>
     </Reference>

@@ -17,13 +17,14 @@ namespace Sitecore.SharedSource.DynamicSites.Fields.ListTypes
 			return multilistField.ListItems;
 		}
 
-		public List<Item> ListItems
+	    private List<Item> ListItems
 		{
 			get
 			{
 				if (field == null) return new List<Item>();
-				if (item.Fields[field.InnerField.Name] == null) return new List<Item>();
-				return ((MultilistField)item.Fields[field.InnerField.Name]).GetItems().ToList();
+
+				return item.Fields[field.InnerField.Name] == null ? new List<Item>() : 
+                    ((MultilistField)item.Fields[field.InnerField.Name]).GetItems().ToList();
 			}
 		}
 
@@ -44,23 +45,7 @@ namespace Sitecore.SharedSource.DynamicSites.Fields.ListTypes
 					return new List<string>();
 				}
 
-				if (string.IsNullOrEmpty(Raw))
-				{
-					return new List<string>();
-				}
-
-				List<string> itemIds = new List<string>();
-				foreach(string id in Raw.Split('|'))
-				{
-					if(string.IsNullOrEmpty(id))
-					{
-						continue;
-					}
-
-					itemIds.Add(id);
-				}
-
-				return itemIds;
+				return string.IsNullOrEmpty(Raw) ? new List<string>() : Raw.Split('|').Where(id => !string.IsNullOrEmpty(id)).ToList();
 			}
 		}
 	}

@@ -1,5 +1,4 @@
-﻿using System;
-using Sitecore.Data.Fields;
+﻿using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
 
 namespace Sitecore.SharedSource.DynamicSites.Fields.ListTypes
@@ -11,12 +10,12 @@ namespace Sitecore.SharedSource.DynamicSites.Fields.ListTypes
 		{
 		}
 
-	    public String Value
+	    public string Value
 	    {
 	        get
 	        {
-                if (field == null) return String.Empty;
-                return item.Fields[field.InnerField.Name] == null ? String.Empty : field.Value;
+                if (field == null) return string.Empty;
+                return item.Fields[field.InnerField.Name] == null ? string.Empty : field.Value;
 	        }
 	    }
 

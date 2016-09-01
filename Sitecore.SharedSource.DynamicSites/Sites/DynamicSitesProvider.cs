@@ -74,7 +74,7 @@ namespace Sitecore.SharedSource.DynamicSites.Sites
             return new Site(DynamicSiteSettings.SiteName, attributeDictionary);
         }
 
-        private void AddInheritedProperties(Site site, List<KeyValuePair<string, Site>> siteDictionary)
+        private void AddInheritedProperties(Site site, IEnumerable<KeyValuePair<string, Site>> siteDictionary)
         {
             var index = site.Properties["inherits"];
             var inheritedSite = siteDictionary.GetSiteByKey(DynamicSiteManager.CleanCacheKeyName(index));
