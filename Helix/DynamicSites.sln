@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Foundation", "Foundation", "{42ABC6F0-5DE0-4DC7-BE6E-10469C8C602C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Multisite", "Multisite", "{FBA20ED3-E685-4AE0-8CC8-1DCC1911CCE6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DynamicSites", "DynamicSites", "{AAEAF6D3-848B-4620-9778-D719A7BA919B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sitecore.Foundation.Multisite.DynamicSites", "src\Foundation\Multisite\DynamicSites\code\Sitecore.Foundation.Multisite.DynamicSites.csproj", "{CB88F922-26BB-459E-969D-2EBBFC4539D0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CB88F922-26BB-459E-969D-2EBBFC4539D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB88F922-26BB-459E-969D-2EBBFC4539D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB88F922-26BB-459E-969D-2EBBFC4539D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB88F922-26BB-459E-969D-2EBBFC4539D0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FBA20ED3-E685-4AE0-8CC8-1DCC1911CCE6} = {42ABC6F0-5DE0-4DC7-BE6E-10469C8C602C}
+		{AAEAF6D3-848B-4620-9778-D719A7BA919B} = {FBA20ED3-E685-4AE0-8CC8-1DCC1911CCE6}
+		{CB88F922-26BB-459E-969D-2EBBFC4539D0} = {AAEAF6D3-848B-4620-9778-D719A7BA919B}
+	EndGlobalSection
+EndGlobal
