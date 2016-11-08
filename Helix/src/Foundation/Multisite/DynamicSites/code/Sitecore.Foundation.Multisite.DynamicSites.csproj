@@ -124,7 +124,7 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Config\Include\x.CustomModules\DynamicSites.config" />
+    <Content Include="App_Config\Include\x.CustomModules\Sitecore.Foundation.Multisite.DynamicSites.config" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
