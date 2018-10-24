@@ -71,6 +71,14 @@ Adds:
         <patch:attribute name="rootPath">/sitecore/content</patch:attribute>
         <patch:attribute name="startItem">/disabled</patch:attribute>
       </site>
+
+      <site name="exm">
+        <patch:attribute name="mode">on</patch:attribute>
+        <patch:attribute name="hostName">disabled.local</patch:attribute>
+        <patch:attribute name="rootPath">/sitecore/content</patch:attribute>
+        <patch:attribute name="startItem">/disabled</patch:attribute>
+      </site>
+      
     </sites>
     <siteManager>
       <patch:attribute name="defaultProvider">switcher</patch:attribute>
